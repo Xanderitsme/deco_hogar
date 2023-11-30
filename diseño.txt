@@ -1,0 +1,14 @@
+Sistema de gestión de inventario para deco_hogar
+
+Acciones generales {
+ x- Acceder a la cuenta
+ x Ver el registro de almacén
+ - Vender un producto
+ - Añadir un producto
+ - Ver los trabajadores
+ - Ver las ventas de los trabajadores
+ - Generar facturas
+ - modificar datos producto (solo adinistrador de almacen)
+ - Crear una cuenta (solo administrador general)
+ - 
+}

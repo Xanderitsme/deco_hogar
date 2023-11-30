@@ -1,0 +1,60 @@
+body {
+    margin: 0;
+}
+main {
+    /* background-color: #14213D; */
+    background-image: url(../recursos/img/fondo/fondo.jpg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    background-size: cover;
+    min-height: 100dvh;
+    min-width: 100%;
+    display: grid;
+    place-content: center;
+    font-family: Inter;
+}
+.contenedor-inicio-sesion {
+    background-color: white;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 346px;
+    padding: 20px 30px;
+    align-content: space-between;
+    color: #14213D;
+    border-radius: 20px;
+}
+input {
+    background-color: hsl(0, 0%, 90%);
+    border: none;
+    height: 40px;
+    padding-left: 10px;
+    font-family: Inter;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+input:focus-visible {
+    outline: none;
+    background-color: hsl(0, 0%, 85%);
+}
+.boton-amarillo {
+    margin-top: 40px;
+    height: 40px;
+    border-radius: 20px;
+    background-color: #FCA311;
+    color: #14213D;
+    border: none;
+    font-family: Inter;
+    font-weight: 700;
+    font-size: 20px;
+}
+.boton-amarillo:hover {
+    animation: pulse 0.3s ease-in infinite alternate both;
+}
+.boton-amarillo:focus-visible {
+    outline: 2px solid #14213D;
+}
+@keyframes pulse {
+    to { transform: translateY(-5px); }
+}
