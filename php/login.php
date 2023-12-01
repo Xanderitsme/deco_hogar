@@ -1,13 +1,16 @@
 <?php
 session_start();
 
-if(isset($_SESSION['username'])){
+if(isset($_SESSION['cuentaID'])){
     header("location:../index.php");
 }
 
 if ($_SERVER["REQUEST_METHOD"] = "POST") {
     if (isset($_POST["usuario"])) {
-        $_SESSION["username"] = $_POST["usuario"];
+
+        
+
+        $_SESSION["cuentaID"] = $_POST["usuario"];
         header("location:../index.php");
     }
 }
@@ -26,9 +29,9 @@ if ($_SERVER["REQUEST_METHOD"] = "POST") {
         <form action="<?php htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="post" class="contenedor-inicio-sesion">
             <h1>Iniciar Sesión</h1>
             <label for="usuario">Usuario:</label>
-            <input type="text" name="usuario" id="usuario" required>
+            <input type="text" name="usuario" required>
             <label for="clave">Contraseña:</label>
-            <input type="password" name="clave" id="clave" required>
+            <input type="password" name="clave" required>
             <button class="boton-amarillo">Iniciar sesión</button>
         </form>
     </main>

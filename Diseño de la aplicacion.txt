@@ -1,0 +1,114 @@
+//Sintaxis:
+//  "{}": Las llaves envuelven el contenido de un elemento.  
+//  "()": Los paréntesis indican que ese elemento es un enlace (botón) que puede llevar a otra interfaz.
+//  ":" : Los dos puntos funcionan de forma similar a las llaves, indican el contenido de un elemento.
+//  "-" : El guión representa elementos de una lista, no interactuables.
+//  ";" : El punto y coma indica que el elemento interactivo es un botón.
+//  "``": Las tildes como comillas sirven para hacer una explicación o aclaración.
+//  "*" : El asterisco indica que un evento se debe realizar siempre
+-----------------------------------------------------------------------------------------------------------
+
+Sistema de gestión de inventario para deco_hogar
+
+Acciones generales {
+ x Iniciar sesion
+ x generar proforma de venta de productos (vendedores) `vender productos`
+ - generar factura y cobrar (cajero) `confirmar venta`
+ - gestionar inventario almacen (administrador almacen) `gestionar almacen`
+ - gestionar trabajadores, sueldos, cuentas (administrador general) `gestionar trabajadores`
+
+ - Ver el registro de almacén
+ - Añadir un producto
+ - Ver los trabajadores
+ - Ver reporte de las ventas de los trabajadores
+ - ver reporte del dia
+ - Generar facturas
+ - modificar datos producto (solo adinistrador de almacen)
+ - Crear una cuenta (solo administrador general)
+}
+
+Eventos generales de la aplicación:
+
+*Iniciar sesion {
+    `Usuario:` usuario
+    `Contraseña:` contraseña
+    Iniciar sesion();
+}
+
+Interfaz general (vendedor) {
+    "Vender productos"
+
+    contenedor producto {
+     - Nombre
+     - Descripción
+     - Precio
+     - Disponible
+     - añadir producto();
+    }
+
+    Lista productos seleccionados {
+        producto {
+         - Nombre...
+         Editar ();
+         Eliminar ();
+        }
+        
+        `Subtotal:` S/. subtotal
+        Generar proforma de venta ();
+    }
+}
+
+Añadir producto / Editar (venta) {
+    producto:
+     - Nombre
+     - Descripción
+     - Precio
+     - Cantidad `aumentar o disminuir`
+     - Aceptar();
+}
+
+
+
+Interfaz inicial {
+    `{Saludo según la hora del día}`
+    `¿Qué haremos hoy?`
+    Últimas actividades agregadas {
+        Actividad n () {
+         - descripcion corta
+         - hora
+         - estado (); `Se ve de un color diferente si la actividad ha sido realizada`
+        }
+        Actividad n () `otra actividad`
+        Actividad n () `otra actividad`
+    }
+    Agregar actividad ()
+    Ver actividades anteriores ()
+    Configuración ()
+}
+
+Interfaz de cada actividad () {
+    - Fecha y hora
+    - Estado
+    Descripción detallada (); `Permite editar el contenido al hacer click sobre el elemento`
+    Eliminar actividad ();
+}
+
+Eliminar actividad () {
+    `Esta actividad se eliminará de manera permanente y no podrá ser recuperada`
+    `¿Desea eliminar esta actividad?` :
+    - si
+    - no
+}
+
+Agregar actividad () {
+    - Fecha y hora
+    Descripción (); `Es un input para ingresar la descripción de la actividad`
+}
+
+`En desarrollo . . .`
+
+Eventos que pueden suceder en segundo plano:
+
+Mostrar notificación ();
+
+`En desarrollo . . .`

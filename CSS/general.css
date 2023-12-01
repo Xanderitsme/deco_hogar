@@ -2,12 +2,12 @@ body {
     margin: 0;
 }
 main {
-    /* background-color: #14213D; */
-    background-image: url(../recursos/img/fondo/fondo.jpg);
-    background-repeat: no-repeat;
-    background-position: center;
-    background-attachment: fixed;
-    background-size: cover;
+    background-color: #14213D;
+    /* background-image: url(../recursos/img/fondo/fondo.jpg); */
+    /* background-repeat: no-repeat; */
+    /* background-position: center; */
+    /* background-attachment: fixed; */
+    /* background-size: cover; */
     min-height: 100dvh;
     min-width: 100%;
     display: grid;

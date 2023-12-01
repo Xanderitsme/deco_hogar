@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if(!isset($_SESSION['username'])){
+if(!isset($_SESSION['cuentaID'])){
     header("location:php/login.php");
 }
 
@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] = "POST") {
         </form>
 
         <p>Usuario:
-            <?php echo $_SESSION["username"]; ?>
+            <?php echo $_SESSION["cuentaID"]; ?>
         </p>
     </main>
 </body>
