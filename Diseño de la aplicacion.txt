@@ -1,4 +1,4 @@
-//Sintaxis:
+//  Sintaxis:
 //  "{}": Las llaves envuelven el contenido de un elemento.  
 //  "()": Los paréntesis indican que ese elemento es un enlace (botón) que puede llevar a otra interfaz.
 //  ":" : Los dos puntos funcionan de forma similar a las llaves, indican el contenido de un elemento.
@@ -6,6 +6,7 @@
 //  ";" : El punto y coma indica que el elemento interactivo es un botón.
 //  "``": Las tildes como comillas sirven para hacer una explicación o aclaración.
 //  "*" : El asterisco indica que un evento se debe realizar siempre
+//  "·" : Ideas no implementadas
 -----------------------------------------------------------------------------------------------------------
 
 Sistema de gestión de inventario para deco_hogar
@@ -29,36 +30,45 @@ Acciones generales {
 
 Eventos generales de la aplicación:
 
-*Iniciar sesion {
+*Iniciar sesion (todos) {
     `Usuario:` usuario
     `Contraseña:` contraseña
     Iniciar sesion();
 }
 
-Interfaz general (vendedor) {
-    "Vender productos"
+----- Vendedor / Cajero -----
 
-    contenedor producto {
+Productos (vendedor / cajero) {
+    "Interfaz general"
+
+	Buscador de productos ();
+
+    Producto [] {
      - Nombre
      - Descripción
      - Precio
      - Disponible
-     - añadir producto();
+     - Añadir producto();
     }
 
     Lista productos seleccionados {
-        producto {
-         - Nombre...
-         Editar ();
-         Eliminar ();
+    	Vaciar lista (); `tres puntos`
+        producto [] {
+          - Nombre...
+            Editar ();
+            Eliminar ();
         }
         
-        `Subtotal:` S/. subtotal
+        `Subtotal:` $ subtotal
         Generar proforma de venta ();
     }
+
+    · historial de ventas general
 }
 
 Añadir producto / Editar (venta) {
+    "Ventana flotante"
+
     producto:
      - Nombre
      - Descripción
@@ -67,48 +77,208 @@ Añadir producto / Editar (venta) {
      - Aceptar();
 }
 
+Generar proforma de venta {
+    "previsualizar proforma"
 
+    *datos cliente {
+        - Tipo (per_nat / per_jud)
+          per_nat:
+          - DNI
+          - Nombres
+          - Apellidos
+          per_jud:
+          - RUC
+          - Denominación social
+        - Numero contacto
 
-Interfaz inicial {
-    `{Saludo según la hora del día}`
-    `¿Qué haremos hoy?`
-    Últimas actividades agregadas {
-        Actividad n () {
-         - descripcion corta
-         - hora
-         - estado (); `Se ve de un color diferente si la actividad ha sido realizada`
-        }
-        Actividad n () `otra actividad`
-        Actividad n () `otra actividad`
+        Buscar cliente();
     }
-    Agregar actividad ()
-    Ver actividades anteriores ()
-    Configuración ()
+
+    Volver ();
+	Imprimir ();
+    Confirmar ();
+
+    Código de proforma: `Codigo`
 }
 
-Interfaz de cada actividad () {
-    - Fecha y hora
-    - Estado
-    Descripción detallada (); `Permite editar el contenido al hacer click sobre el elemento`
-    Eliminar actividad ();
+Clientes (vendedor / cajero) {
+	Buscador de clientes ();
+
+	cliente {
+		(Nombres y apellidos cliente / Denominación social)
+		(DNI / RUC)
+		Numero contacto
+		fecha registro
+
+		· Editar cliente ();
+	}
 }
 
-Eliminar actividad () {
-    `Esta actividad se eliminará de manera permanente y no podrá ser recuperada`
-    `¿Desea eliminar esta actividad?` :
-    - si
-    - no
+----- Cajero -----
+
+Confirmar venta (cajero) {
+	Buscador de proformas ();
+
+    proforma [] {
+		Codigo
+		fecha
+		(DNI / RUC)
+		Estado
+		Total
+
+		Ver proforma ();
+	}
+
+	papelera de reciclaje ();
 }
 
-Agregar actividad () {
-    - Fecha y hora
-    Descripción (); `Es un input para ingresar la descripción de la actividad`
+Ver proforma () {
+	proforma {
+		Codigo proforma
+		fecha proforma
+		(Nombres y apellidos cliente / Denominación social)
+		(DNI / RUC)
+		Numero contacto
+		Detalles [] {
+			Nombre producto
+			Cantidad
+			Unidad
+			Subtotal
+		}
+		Total
+
+		(Estado == pendiente) {
+			Confirmar venta ();
+			Eliminar ();
+		}
+		
+	}
 }
 
-`En desarrollo . . .`
+Eliminar () {
+	`Estas seguro que deseas eliminar esta proforma de venta?`
+	(Si / No) ();
+}
 
-Eventos que pueden suceder en segundo plano:
+----- Administrador almacen -----
 
-Mostrar notificación ();
+Gestionar inventario () {
+	"Interfaz general"
 
-`En desarrollo . . .`
+	Buscador de productos ();
+
+    Producto [] {
+     	Nombre
+     	Descripción
+     	Precio
+     	Stock
+     	Editar datos ();
+    }
+
+	Agregar nuevo producto () {
+		Nombre
+		Descripción
+     	Precio
+     	Stock
+	}
+
+	Solicitar productos ();
+	Historial de movimientos del inventario ();
+	Ver ordenes de compra ();
+}
+
+Solicitar productos () {
+	> proveedor: ...
+	
+	proveedor {
+		Denominación social
+		RUC
+		Tiempo de envio
+		Numero contacto
+		Correo electrónico
+		Ubicación
+	}
+
+	Elegir producto:
+	Producto [] {
+     	Nombre
+     	Descripción
+     	Precio
+     	Stock
+    }
+
+	Stock: `stock`
+	Motivo : `motivo de la solicitud`
+
+	Confirma orden de compra ();
+}
+
+Historial de movimientos de inventario (Administrador almacen / Administrador general) {
+	Movimiento inventario [] {
+		Nombre producto
+		Cantidad
+		Tipo movimiento
+		· VentaID
+		Fecha movimiento
+	}
+}
+
+Ver ordenes de compra (Administrador almacen / Administrador general) {
+	Ordenes de compra [] {
+		Nombre producto
+		Cantidad
+		Estado
+		Denominación social proveedor
+		Fecha pedido
+		Fecha entrega esperada
+	}
+}
+
+----- Administrador general -----
+
+Gestionar ordenes de compra {
+	
+	Ver ordenes de compra ();
+	Autorizar orden de compra ();
+}
+
+Trabajadores {
+	trabajadores [] {
+		Nombres y apellidos
+		DNI
+		cargo
+		Sueldo
+		Celular
+		Correo electrónico
+		Fecha contratación
+	}
+
+	Registrar trabajador ();
+	Crear cuenta para trabajador ();
+}
+
+Registrar trabajador () {
+	Nombres y apellidos
+	DNI
+	cargo
+	Sueldo
+	Celular
+	Correo electrónico
+	Fecha contratación
+}
+
+Crear cuenta para trabajador () {
+	Elegir trabajador (sin cuenta):
+	trabajadores [] {
+		Nombres y apellidos
+		DNI
+		cargo
+		Sueldo
+		Celular
+		Correo electrónico
+		Fecha contratación
+	}
+
+	Usuario: `usuario`
+	Contraseña temporal: `contraseña`
+}
