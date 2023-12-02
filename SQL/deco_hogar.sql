@@ -1,4 +1,4 @@
--- drop database if exists deco_hogar;
+drop database if exists deco_hogar;
 create database if not exists deco_hogar;
 use deco_hogar;
 
@@ -76,6 +76,7 @@ create table if not exists clientes (
     ID int auto_increment,
     tipo enum('persona natural', 'persona juridica') not null,
     numero_contacto varchar (9) unique,
+    fecha_registro date not null default (now()),
     primary key (ID)
 );
 
@@ -89,8 +90,6 @@ create table if not exists clientes_per_nat (
     DNI varchar (8) not null unique,
     foreign key (clienteID) references clientes (ID) on delete cascade
 );
-
-SELECT * FROM clientes;
 
 -- insert into clientes_per_nat (`clienteID`, nombres, apellidos, `DNI`) values
 -- (1, "Noe", "Conchacalla", "sin DNI");
@@ -109,6 +108,8 @@ create table if not exists proveedores (
     denominacion_social varchar (100) not null,
     RUC varchar (11) not null unique,
     tiempo_envio int not null,
+    numero_contacto varchar (9) unique,
+    correo_electronico varchar (60) not null unique,
     ubicacion varchar (60) not null,
     primary key (ID)
 );
@@ -139,13 +140,14 @@ create table if not exists productos (
 -- ("Hervidor eléctrico", "Hervidor eléctrico de agua con apagado automático", 39.99, 25),
 -- ("Batidora de vaso", "Batidora de vaso con cuchillas de acero inoxidable", 119.99, 18);
 
--- drop table if exists facturas;
-create table if not exists facturas (
+-- drop table if exists proformas_venta;
+create table if not exists proformas_venta (
     ID int auto_increment,
     total float not null,
     fecha timestamp not null default current_timestamp,
     clienteID int not null,
     vendedorID int not null,
+    estado enum('pendiente', 'pagado') not null,
     foreign key (clienteID) references clientes (ID) on delete cascade,
     foreign key (vendedorID) references trabajadores (ID) on delete cascade,
     primary key (ID)
@@ -156,10 +158,11 @@ create table if not exists detalles (
     ID int auto_increment,
     cantidad int not null default 1,
     subtotal float not null,
+    unidad enum('Unidad') not null,
     productoID int not null,
-    facturaID int not null,
+    proforma_ventaID int not null,
     foreign key (productoID) references productos (ID) on delete cascade,
-    foreign key (facturaID) references facturas (ID) on delete cascade,
+    foreign key (proforma_ventaID) references proformas_venta (ID) on delete cascade,
     primary key (ID)
 );
 
@@ -167,10 +170,10 @@ create table if not exists detalles (
 create table if not exists ventas (
     ID int auto_increment,
     metodo_pago enum('efectivo', 'tarjeta') not null,
-    facturaID int not null,
+    proforma_ventaID int not null,
     cajeroID int not null,
     foreign key (cajeroID) references trabajadores (ID) on delete cascade,
-    foreign key (facturaID) references facturas (ID) on delete cascade,
+    foreign key (proforma_ventaID) references proformas_venta (ID) on delete cascade,
     primary key (ID)
 );
 
@@ -179,8 +182,8 @@ create table if not exists devoluciones (
     ID int auto_increment,
     motivo varchar (250) not null,
     fecha timestamp not null default current_timestamp,
-    facturaID int not null,
-    foreign key (facturaID) references facturas (ID) on delete cascade,
+    proforma_ventaID int not null,
+    foreign key (proforma_ventaID) references proformas_venta (ID) on delete cascade,
     primary key (ID)
 );
 
@@ -200,7 +203,7 @@ create table if not exists ordenes_compra (
     primary key (ID)
 );
 
--- insert into facturas (total, `clienteID`, `vendedorID`, `cajeroID`) values
+-- insert into proformas_venta (total, `clienteID`, `vendedorID`, `cajeroID`) values
 -- (0, 1, 1, 1);
 
 -- drop table if exists movimientos_inventario;
@@ -240,6 +243,6 @@ create table if not exists cuentas (
 -- drop table if exists contrasenias;
 create table if not exists contrasenias (
     cuentaID int not null,
-    clave varchar (20) not null unique,
+    clave varchar (100) not null,
     foreign key (cuentaID) references cuentas (ID) on delete cascade
 );
