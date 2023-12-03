@@ -13,7 +13,7 @@ Sistema de gestión de inventario para deco_hogar
 
 Acciones generales {
  x Iniciar sesion
- x generar proforma de venta de productos (vendedores) `vender productos`
+ - generar proforma de venta de productos (vendedores) `vender productos`
  - generar factura y cobrar (cajero) `confirmar venta`
  - gestionar inventario almacen (administrador almacen) `gestionar almacen`
  - gestionar trabajadores, sueldos, cuentas (administrador general) `gestionar trabajadores`
@@ -36,214 +36,249 @@ Eventos generales de la aplicación:
     Iniciar sesion();
 }
 
------ Vendedor / Cajero -----
+*Cabecera general {
+	Nombres y apellidos: `nombres y apellidos`
 
-Productos (vendedor / cajero) {
-    "Interfaz general"
+	Secciones [] { `depende del tipo de cuenta`
+		Vendedor :
+			Productos
+			Clientes
 
-	Buscador de productos ();
+		Cajero :
+			Productos
+			Clientes
+			Proformas de venta
 
-    Producto [] {
-     - Nombre
-     - Descripción
-     - Precio
-     - Disponible
-     - Añadir producto();
-    }
+		Administrador almacen :
+			Inventario
+			Solicitar productos
+			Historial de inventario
+			Ver Ordenes de compra
 
-    Lista productos seleccionados {
-    	Vaciar lista (); `tres puntos`
-        producto [] {
-          - Nombre...
-            Editar ();
-            Eliminar ();
-        }
-        
-        `Subtotal:` $ subtotal
-        Generar proforma de venta ();
-    }
-
-    · historial de ventas general
-}
-
-Añadir producto / Editar (venta) {
-    "Ventana flotante"
-
-    producto:
-     - Nombre
-     - Descripción
-     - Precio
-     - Cantidad `aumentar o disminuir`
-     - Aceptar();
-}
-
-Generar proforma de venta {
-    "previsualizar proforma"
-
-    *datos cliente {
-        - Tipo (per_nat / per_jud)
-          per_nat:
-          - DNI
-          - Nombres
-          - Apellidos
-          per_jud:
-          - RUC
-          - Denominación social
-        - Numero contacto
-
-        Buscar cliente();
-    }
-
-    Volver ();
-	Imprimir ();
-    Confirmar ();
-
-    Código de proforma: `Codigo`
-}
-
-Clientes (vendedor / cajero) {
-	Buscador de clientes ();
-
-	cliente {
-		(Nombres y apellidos cliente / Denominación social)
-		(DNI / RUC)
-		Numero contacto
-		fecha registro
-
-		· Editar cliente ();
+		Administrador general :
+			Ordenes de compra
+			Historial de inventario
+			Trabajadores
 	}
 }
+
+----- Vendedor / Cajero -----
+
+	Productos {
+		"Interfaz general"
+
+		Buscador de productos ();
+
+		Producto [] {
+		- Nombre
+		· Descripción
+		- Precio
+		- Disponible
+		- Añadir producto();
+		}
+
+		Lista productos seleccionados {
+			Vaciar lista (); `tres puntos`
+			producto [] {
+				Nombre...
+				Editar producto ();
+				Eliminar ();
+			}
+			
+			`Subtotal:` $ subtotal
+			Generar proforma de venta ();
+		}
+
+		· historial de ventas general
+	}
+
+	Añadir producto / Editar () {
+		"Ventana flotante"
+
+		producto:
+		- Nombre
+		- Descripción
+		- Precio
+		- Cantidad `aumentar o disminuir`
+		- Aceptar();
+	}
+
+	Generar proforma de venta () {
+		"previsualizar proforma"
+
+		*datos cliente {
+			- Tipo (per_nat / per_jud)
+			per_nat:
+			- DNI
+			- Nombres
+			- Apellidos
+			per_jud:
+			- RUC
+			- Denominación social
+			- Numero contacto
+
+			Buscar cliente();
+		}
+
+		Volver ();
+		Imprimir ();
+		Confirmar ();
+
+		Código de proforma: `Codigo`
+	}
+
+	Clientes (vendedor / cajero) {
+		Buscador de clientes ();
+
+		cliente {
+			(Nombres y apellidos cliente / Denominación social)
+			(DNI / RUC)
+			Numero contacto
+			fecha registro
+
+			· Editar cliente ();
+		}
+	}
 
 ----- Cajero -----
 
-Confirmar venta (cajero) {
-	Buscador de proformas ();
+	Confirmar venta - Proformas de venta {
+		Buscador de proformas ();
 
-    proforma [] {
-		Codigo
-		fecha
-		(DNI / RUC)
-		Estado
-		Total
+		proforma [] {
+			Codigo
+			fecha
+			(DNI / RUC)
+			Estado
+			Total
 
-		Ver proforma ();
+			Ver proforma ();
+		}
+
+		papelera de reciclaje ();
 	}
 
-	papelera de reciclaje ();
-}
+	Ver proforma () {
+		proforma {
+			Codigo proforma
+			fecha proforma
+			(Nombres y apellidos cliente / Denominación social)
+			(DNI / RUC)
+			Numero contacto
+			Detalles [] {
+				Nombre producto
+				Cantidad
+				Unidad
+				Subtotal
+			}
+			Total
 
-Ver proforma () {
-	proforma {
-		Codigo proforma
-		fecha proforma
-		(Nombres y apellidos cliente / Denominación social)
-		(DNI / RUC)
-		Numero contacto
-		Detalles [] {
-			Nombre producto
-			Cantidad
-			Unidad
-			Subtotal
+			(Estado == pendiente) {
+				Confirmar venta ();
+				Eliminar ();
+			}
+			
 		}
-		Total
-
-		(Estado == pendiente) {
-			Confirmar venta ();
-			Eliminar ();
-		}
-		
 	}
-}
 
-Eliminar () {
-	`Estas seguro que deseas eliminar esta proforma de venta?`
-	(Si / No) ();
-}
+	Eliminar () {
+		`Estas seguro que deseas eliminar esta proforma de venta?`
+		(Si / No) ();
+	}
 
 ----- Administrador almacen -----
 
-Gestionar inventario () {
-	"Interfaz general"
+	Gestionar inventario () {
+		"Interfaz general"
 
-	Buscador de productos ();
+		Buscador de productos ();
 
-    Producto [] {
-     	Nombre
-     	Descripción
-     	Precio
-     	Stock
-     	Editar datos ();
-    }
+		Producto [] {
+			Nombre
+			Descripción
+			Precio
+			Stock
+			Editar datos ();
+		}
 
-	Agregar nuevo producto () {
-		Nombre
-		Descripción
-     	Precio
-     	Stock
+		Agregar nuevo producto () {
+			Nombre
+			Descripción
+			Precio
+			Stock
+		}
 	}
 
-	Solicitar productos ();
-	Historial de movimientos del inventario ();
-	Ver ordenes de compra ();
-}
+	Solicitar productos {
+		> proveedor: ...
+		
+		proveedor {
+			Denominación social
+			RUC
+			Tiempo de envio
+			Numero contacto
+			Correo electrónico
+			Ubicación
+		}
 
-Solicitar productos () {
-	> proveedor: ...
-	
-	proveedor {
-		Denominación social
-		RUC
-		Tiempo de envio
-		Numero contacto
-		Correo electrónico
-		Ubicación
+		Elegir producto:
+		Producto [] {
+			Nombre
+			Descripción
+			Precio
+			Stock
+		}
+
+		Cantidad: `cantidad`
+		Motivo : `motivo de la solicitud`
+
+		Confirma orden de compra ();
 	}
 
-	Elegir producto:
-	Producto [] {
-     	Nombre
-     	Descripción
-     	Precio
-     	Stock
-    }
-
-	Stock: `stock`
-	Motivo : `motivo de la solicitud`
-
-	Confirma orden de compra ();
-}
-
-Historial de movimientos de inventario (Administrador almacen / Administrador general) {
-	Movimiento inventario [] {
-		Nombre producto
-		Cantidad
-		Tipo movimiento
-		· VentaID
-		Fecha movimiento
+	Historial de movimientos de inventario (Administrador almacen / Administrador general) {
+		Movimiento inventario [] {
+			Nombre producto
+			Cantidad
+			Tipo movimiento
+			· VentaID
+			Fecha movimiento
+		}
 	}
-}
 
-Ver ordenes de compra (Administrador almacen / Administrador general) {
-	Ordenes de compra [] {
-		Nombre producto
-		Cantidad
-		Estado
-		Denominación social proveedor
-		Fecha pedido
-		Fecha entrega esperada
+	Ver ordenes de compra (Administrador almacen / Administrador general) {
+		Ordenes de compra [] {
+			Nombre producto
+			Cantidad
+			Estado
+			Denominación social proveedor
+			Fecha pedido
+			Fecha entrega esperada
+		}
 	}
-}
 
 ----- Administrador general -----
 
-Gestionar ordenes de compra {
-	
-	Ver ordenes de compra ();
-	Autorizar orden de compra ();
-}
+	Gestionar ordenes de compra {
+		Ver ordenes de compra ();
+		Autorizar orden de compra ();
+	}
 
-Trabajadores {
-	trabajadores [] {
+	Trabajadores {
+		trabajadores [] {
+			Nombres y apellidos
+			DNI
+			cargo
+			Sueldo
+			Celular
+			Correo electrónico
+			Fecha contratación
+		}
+
+		Registrar trabajador ();
+		Crear cuenta para trabajador ();
+	}
+
+	Registrar trabajador () {
 		Nombres y apellidos
 		DNI
 		cargo
@@ -253,32 +288,18 @@ Trabajadores {
 		Fecha contratación
 	}
 
-	Registrar trabajador ();
-	Crear cuenta para trabajador ();
-}
+	Crear cuenta para trabajador () {
+		Elegir trabajador (sin cuenta):
+		trabajadores [] {
+			Nombres y apellidos
+			DNI
+			cargo
+			Sueldo
+			Celular
+			Correo electrónico
+			Fecha contratación
+		}
 
-Registrar trabajador () {
-	Nombres y apellidos
-	DNI
-	cargo
-	Sueldo
-	Celular
-	Correo electrónico
-	Fecha contratación
-}
-
-Crear cuenta para trabajador () {
-	Elegir trabajador (sin cuenta):
-	trabajadores [] {
-		Nombres y apellidos
-		DNI
-		cargo
-		Sueldo
-		Celular
-		Correo electrónico
-		Fecha contratación
+		Usuario: `usuario`
+		Contraseña temporal: `contraseña`
 	}
-
-	Usuario: `usuario`
-	Contraseña temporal: `contraseña`
-}
