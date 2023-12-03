@@ -1,14 +1,14 @@
 <?php
 session_start();
 
-if(!isset($_SESSION['cuentaID'])){
-    header("location:php/login.php");
+if(isset($_SESSION['cuentaID'])){
+    header("location:php/productos.php");
 }
 
 if ($_SERVER["REQUEST_METHOD"] = "POST") {
-    if (isset($_POST["cerrar_sesion"])) {
-        session_destroy();
-        header("location:php/login.php");
+    if (isset($_POST["usuario"])) {
+        $_SESSION["cuentaID"] = $_POST["usuario"];
+        header("location:php/productos.php");
     }
 }
 ?>
@@ -16,19 +16,20 @@ if ($_SERVER["REQUEST_METHOD"] = "POST") {
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Productos</title>
+    <title>Iniciar Sesión</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="CSS/login.css">
 </head>
 <body>
     <main>
-        <h1>Productos</h1>
-        <form action="<?php htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="POST">
-            <button name="cerrar_sesion">Cerrar sesión</button>
+        <form action="<?php htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="post" class="contenedor-inicio-sesion">
+            <h1>Iniciar Sesión</h1>
+            <label for="usuario">Nombre de usuario</label>
+            <input class="borde sombra" type="text" name="usuario" required>
+            <label for="clave">Contraseña</label>
+            <input class="borde sombra" type="password" name="clave" required>
+            <button class="boton borde sombra">Iniciar sesión</button>
         </form>
-
-        <p>Usuario:
-            <?php echo $_SESSION["cuentaID"]; ?>
-        </p>
     </main>
 </body>
 </html>
