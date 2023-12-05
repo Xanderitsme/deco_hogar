@@ -27,13 +27,43 @@ class mainModel {
     }
 
     protected function ejecutarConsulta($consulta) {
-        $sql = $this->conectar()->prepare($consulta);
-        $sql->execute();
+        try {
+            $sql = $this->conectar()->prepare($consulta);
+            $sql->execute();
+        } catch (Exception) {
+            $sql = null;
+        }
+
         return $sql;
     }
 
     public function limpiarCadena($cadena) {
-        $palabras=["<script>","</script>","<script src","<script type=","SELECT * FROM","SELECT "," SELECT ","DELETE FROM","INSERT INTO","DROP TABLE","DROP DATABASE","TRUNCATE TABLE","SHOW TABLES","SHOW DATABASES","<?php","?>","--","^","<",">","==","=",";","::"];
+        $palabras=[
+            "<script>",
+            "</script>",
+            "<script src",
+            "<script type=",
+            "SELECT * FROM",
+            "SELECT ",
+            " SELECT ",
+            "DELETE FROM",
+            "INSERT INTO",
+            "DROP TABLE",
+            "DROP DATABASE",
+            "TRUNCATE TABLE",
+            "SHOW TABLES",
+            "SHOW DATABASES",
+            "<?php",
+            "?>",
+            "--",
+            "^",
+            "<",
+            ">",
+            "==",
+            "=",
+            ";",
+            "::"
+        ];
 
         $cadena = trim($cadena);
         $cadena = stripslashes($cadena);
@@ -54,16 +84,16 @@ class mainModel {
     }
 
     protected function guardarDatos ($tabla, $datos) {
-        
+
         $query = "insert into $tabla (";
 
         $contador = 0;
         foreach ($datos as $clave) {
-            if ($contador >= 1) { $query .= ","; }
+            if( $contador >= 1) { $query .= ","; }
             $query .= $clave["campo_nombre"];
             $contador++;
         }
-
+        
         $query .= ") values(";
 
         $contador = 0;
@@ -74,11 +104,14 @@ class mainModel {
         }
 
         $query .= ")";
-        $sql = $this->conectar()->prepare($query);
 
-        foreach ($datos as $clave) { $sql->bindParam($clave["campo_marcador"], $clave["campo_valor"]); }
-
-        $sql->execute();
+        try {
+            $sql = $this->conectar()->prepare($query);
+            foreach ($datos as $clave) { $sql->bindParam($clave["campo_marcador"], $clave["campo_valor"]); }
+            $sql->execute();
+        } catch (Exception) {
+            $sql = null;
+        }
 
         return $sql;
     }
@@ -89,15 +122,19 @@ class mainModel {
         $campo = $this->limpiarCadena($campo);
         $id = $this->limpiarCadena($id);
         
-        if ($tipo == "Unico") {
-            $sql = $this->conectar()->prepare("select * from $tabla where $campo = :ID");
-            $sql->bindParam(":ID", $id, PDO::PARAM_INT);
-        } elseif ($tipo == "Normal") {
-            $sql = $this->conectar()->prepare("select $campo from $tabla");
+        try {    
+            if ($tipo == "Unico") {
+                $sql = $this->conectar()->prepare("select * from $tabla where $campo = :ID");
+                $sql->bindParam(":ID", $id, PDO::PARAM_INT);
+            } elseif ($tipo == "Normal") {
+                $sql = $this->conectar()->prepare("select $campo from $tabla");
+            }
+
+            $sql->execute();
+        } catch (Exception) {
+            $sql = null;
         }
         
-        $sql->execute();
-
         return $sql;
     }
 
@@ -113,21 +150,29 @@ class mainModel {
 
         $query .= " where " . $condicion["condicion_campo"] . "=" . $condicion["condicion_marcador"];
 
-        $sql = $this->conectar()->prepare($query);
+        try {
+            $sql = $this->conectar()->prepare($query);
 
-        foreach ($datos as $clave) { $sql->bindParam($clave["campo_marcador"], $clave["campo_valor"]); }
-        $sql->bindParam($condicion["condicion_marcador"], $condicion["condicion_valor"]);
+            foreach ($datos as $clave) { $sql->bindParam($clave["campo_marcador"], $clave["campo_valor"]); }
+            $sql->bindParam($condicion["condicion_marcador"], $condicion["condicion_valor"]);
 
-        $sql->execute();
+            $sql->execute();
+        } catch (Exception) {
+            $sql = null;
+        }
 
         return $sql;
     }
 
     protected function eliminarRegistro($tabla, $campo, $id){
-        $sql = $this->conectar()->prepare("delete from $tabla where $campo= :id");
-        $sql->bindParam(":id", $id);
-        $sql->execute();
-        
+        try {
+            $sql = $this->conectar()->prepare("delete from $tabla where $campo= :id");
+            $sql->bindParam(":id", $id);
+            $sql->execute();
+        } catch (Exception) {
+            $sql = null;
+        }
+
         return $sql;
     }
 
@@ -184,4 +229,25 @@ class mainModel {
         return $tabla;
     }
 
+    protected function crearAlertaError($mensajeAlerta) {
+        $alerta = [
+            "tipo" => "simple",
+            "titulo" => "Ocurrió un error inesperado",
+            "texto" => $mensajeAlerta,
+            "icono" => "error"
+        ];
+
+        return $alerta;
+    }
+
+    protected function crearAlertaSuccess($titulo, $mensajeAlerta) {
+        $alerta = [
+            "tipo" => "limpiar",
+            "titulo" => $titulo,
+            "texto" => $mensajeAlerta,
+            "icono" => "success"
+        ];
+
+        return $alerta;
+    }
 }
