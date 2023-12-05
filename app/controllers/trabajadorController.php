@@ -169,7 +169,7 @@ class trabajadorController extends mainModel {
 
         if (!is_null($registrarTrabajador)) {
             if ($registrarTrabajador->rowCount() == 1) {
-                $alerta = $this->crearAlertaSuccess("Trabajador registrado", "El trabajador " . $nombres . "" . $apellidos . "ha sido registrado exitosamente");
+                $alerta = $this->crearAlertaLimpiarSuccess("Trabajador registrado", "El trabajador " . $nombres . " " . $apellidos . "ha sido registrado exitosamente");
             } else {
                 $alerta = $this->crearAlertaError("No se pudo registrar el trabajador, por favor intente nuevamente");
             }
