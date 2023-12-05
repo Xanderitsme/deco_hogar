@@ -2,16 +2,6 @@ drop database if exists deco_hogar;
 create database if not exists deco_hogar;
 use deco_hogar;
 
--- insert into personas (nombres, apellidos, `DNI`) VALUES
--- ("Juan", "Perez", "47141326"),
--- ("Maria", "Gomez", "57654321"),
--- ("Ana", "Lopez", "23456789"),
--- ("Laura", "Martinez", "48765432"),
--- ("Pedro", "Rodriguez", "34567890"),
--- ("Carlos", "Hernandez", "56789012"),
--- ("Jorge", "Diaz", "65432109"),
--- ("Angel", "Fernandez", "45678901");
-
 -- drop table if exists cargos;
 create table if not exists cargos (
     ID int auto_increment,
@@ -19,14 +9,12 @@ create table if not exists cargos (
     primary key (ID)
 );
 
--- insert into cargos (nombre_cargo) values 
--- ("Administrador"),
--- ("Almacenero"),
--- ("Vendedor"),
--- ("Cajero"),
--- ("Cargador");
-
-SELECT * FROM cargos;
+insert into cargos (nombre_cargo) values 
+("Administrador"),
+("Almacenero"),
+("Vendedor"),
+("Cajero"),
+("Cargador");
 
 -- drop table if exists trabajadores;
 create table if not exists trabajadores (
@@ -44,14 +32,7 @@ create table if not exists trabajadores (
 );
 
 insert into trabajadores (nombres, apellidos, dni, sueldo, telefono, email, fecha_contratacion, `cargoID`) values
-("Kyle", "Soda", "12345678", 10000,'123456789', 'kylesoda@dominio.com', date(now()), 1);
-
-SELECT * FROM trabajadores;
-
-insert into trabajadores (nombres, apellidos, dni, telefono, email, fecha_contratacion, sueldo, `cargoID`) values
-("aaa", "aaa", "12121212", null, null, "2023-12-12", 12500, 1);
-
-DELETE from trabajadores where dni = "12345679";
+("Kyle", "Soda", "12345678", 12500,'123456789', 'kylesoda@dominio.com', date(now()), 1);
 
 -- drop table if exists clientes;
 create table if not exists clientes (
@@ -62,8 +43,6 @@ create table if not exists clientes (
     primary key (ID)
 );
 
--- insert into clientes (numero_contacto) values ('911473191');
-
 -- drop table if exists clientes_per_nat;
 create table if not exists clientes_per_nat (
     clienteID int not null,
@@ -72,9 +51,6 @@ create table if not exists clientes_per_nat (
     DNI varchar (8) not null unique,
     foreign key (clienteID) references clientes (ID) on delete cascade
 );
-
--- insert into clientes_per_nat (`clienteID`, nombres, apellidos, `DNI`) values
--- (1, "Noe", "Conchacalla", "sin DNI");
 
 -- drop table if exists clientes_per_jur;
 create table if not exists clientes_per_jur (
@@ -109,18 +85,6 @@ create table if not exists productos (
     stock int default 0 not null,
     primary key (ID)
 );
-
--- insert into productos (nombre, descripcion, precio, stock) values
--- ("Refrigeradora", "Refrigeradora de acero inoxidable con dispensador de agua", 799.99, 20),
--- ("Lavadora", "Lavadora de carga frontal con capacidad de 8 kg", 549.99, 15),
--- ("Televisor LED", "Televisor LED de 55 pulgadas con resolución 4K", 899.99, 18),
--- ("Microondas", "Horno de microondas de 1200W con funciones programables", 199.99, 25),
--- ("Licuadora", "Licuadora de alto rendimiento con jarra de vidrio", 79.99, 30),
--- ("Aire acondicionado", "Aire acondicionado split de 12000 BTU", 699.99, 15),
--- ("Ventilador de torre", "Ventilador de torre oscilante con control remoto", 69.99, 30),
--- ("Plancha de vapor", "Plancha de vapor con suela de cerámica", 49.99, 25),
--- ("Hervidor eléctrico", "Hervidor eléctrico de agua con apagado automático", 39.99, 25),
--- ("Batidora de vaso", "Batidora de vaso con cuchillas de acero inoxidable", 119.99, 18);
 
 -- drop table if exists proformas_venta;
 create table if not exists proformas_venta (
@@ -183,9 +147,6 @@ create table if not exists ordenes_compra (
     primary key (ID)
 );
 
--- insert into proformas_venta (total, `clienteID`, `vendedorID`, `cajeroID`) values
--- (0, 1, 1, 1);
-
 -- drop table if exists movimientos_inventario;
 create table if not exists movimientos_inventario (
     ID int auto_increment,
@@ -202,7 +163,7 @@ create table if not exists entradas_inventario (
     movimiento_inventarioID int not null,
     orden_compraID int not null,
     foreign key (movimiento_inventarioID) references movimientos_inventario (ID) on delete cascade,
-    foreign key (orden_compraID) references ordenes_compra (ID) on delete cascade,
+    foreign key (orden_compraID) references ordenes_compra (ID) on delete cascade
 );
 
 -- drop table if exists salidas_inventario;
@@ -223,6 +184,3 @@ create table if not exists cuentas (
     foreign key (trabajadorID) references trabajadores (ID) on delete cascade,
     primary key (ID)
 );
-
-insert into cuentas (`trabajadorID`, usuario) values
-(1, "kylesoda");
