@@ -1,12 +1,11 @@
 <?php
 namespace app\controllers;
 use app\models\mainModel;
-use PDO;
 
-class userController extends mainModel {
+class usuarioController extends mainModel {
 
     public function registrarUsuarioControlador() {
-        
+
         $trabajadorId = $this->limpiarCadena($_POST["usuario_trabajador_id"]);
         $usuario = $this->limpiarCadena($_POST["usuario_usuario"]);
         $clave1 = $this->limpiarCadena($_POST["usuario_clave_1"]);
@@ -30,7 +29,7 @@ class userController extends mainModel {
             exit();
         }
 
-        if ($this->verificarDatos("[a-zA-Z0-9$@.-]{6,20}", $clave1) || $this->verificarDatos("[a-zA-Z0-9$@.-]{6,20}", $clave2)) {
+        if ($this->verificarDatos("[a-zA-Z0-9$@._\-]{5,20}", $clave1) || $this->verificarDatos("[a-zA-Z0-9$@._\-]{5,20}", $clave2)) {
             $alerta = $this->crearAlertaError("Las claves no coinciden con el formato solicitado");
             return json_encode($alerta);
             exit();
@@ -44,7 +43,7 @@ class userController extends mainModel {
             $clave = password_hash($clave1, PASSWORD_BCRYPT, ["cost" => 10]);
         }
 
-        $check_trabajadorId = $this->ejecutarConsulta("select ID from trabajadores where ID = '$trabajadorId'");
+        $check_trabajadorId = $this->ejecutarConsulta("select ID from trabajadores where ID = $trabajadorId");
 
         if (!is_null($check_trabajadorId)) {
             if ($check_trabajadorId->rowCount() == 0) {
@@ -59,7 +58,7 @@ class userController extends mainModel {
 
         // Verificar si el trabajador ya tiene una cuenta registrada (opcional)
 
-        // $check_cuenta_registrada = $this->ejecutarConsulta("select trabajadorID from cuentas where trabajadorID = '$trabajadorId'");
+        // $check_cuenta_registrada = $this->ejecutarConsulta("select trabajadorID from cuentas where trabajadorID = $trabajadorId");
 
         // if (!is_null($check_cuenta_registrada)) {
         //     if ($check_cuenta_registrada->rowCount() > 0) {
@@ -75,7 +74,7 @@ class userController extends mainModel {
         $check_usuario = $this->ejecutarConsulta("select usuario from cuentas where usuario like '$usuario'");
         if (!is_null($check_usuario)) {
             if ($check_usuario->rowCount() > 0) {
-                $alerta = $this->crearAlertaError("El usuario que acaba de ingresar ya se encuentra registrado");
+                $alerta = $this->crearAlertaError("El nombre de usuario ingresado ya se encuentra registrado");
                 return json_encode($alerta);
                 exit();
             }
@@ -157,11 +156,21 @@ class userController extends mainModel {
 
         if (!is_null($registrarUsuario)) {
             if ($registrarUsuario->rowCount() == 1) {
-                $alerta = $this->crearAlertaSuccess("Usuario registrado", "El usuario " . $usuario . "ha sido registrado exitosamente");
+                $alerta = $this->crearAlertaLimpiarSuccess("Usuario registrado", "El usuario '" . $usuario . "' ha sido registrado exitosamente");
             } else {
+                if (is_file($img_dir . $foto)) {
+                    chmod($img_dir . $foto, 0777);
+                    unlink($img_dir . $foto);
+                }
+
                 $alerta = $this->crearAlertaError("No se pudo registrar el usuario, por favor intente nuevamente");
             }
         } else {
+            if (is_file($img_dir . $foto)) {
+                chmod($img_dir . $foto, 0777);
+                unlink($img_dir . $foto);
+            }
+
             $alerta = $this->crearAlertaError("No se pudo registrar el usuario, por favor intente más tarde");
         }
 
