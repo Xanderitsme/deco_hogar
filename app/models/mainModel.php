@@ -240,7 +240,7 @@ class mainModel {
         return $alerta;
     }
 
-    protected function crearAlertaSuccess($titulo, $mensajeAlerta) {
+    protected function crearAlertaLimpiarSuccess($titulo, $mensajeAlerta) {
         $alerta = [
             "tipo" => "limpiar",
             "titulo" => $titulo,
