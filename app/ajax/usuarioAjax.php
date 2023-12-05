@@ -3,11 +3,11 @@ require_once "../../config/app.php";
 require_once "../views/inc/session_start.php";
 require_once "../../autoload.php";
 
-use app\controllers\userController;
+use app\controllers\usuarioController;
 
 if (isset($_POST["nuevo_usuario"])) {
 
-    $insUsuario = new userController();
+    $insUsuario = new usuarioController();
 
     if ($_POST["nuevo_usuario"] == "registrar") {
         echo $insUsuario->registrarUsuarioControlador();
