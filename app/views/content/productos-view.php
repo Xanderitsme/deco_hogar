@@ -1,8 +1,9 @@
 <div class="seccion-productos">
 	<div class="panel-izquierdo">
 		<h2 class="subtitle">Productos disponibles</h2>
-		<form action="" method="post">
+		<form action="<?php echo APP_URL; ?>app/ajax/usuarioAjax.php" method="post">
 			<input class="borde sombra buscador" type="text" placeholder="Buscar productos...">
+			<input type="hidden" name="buscador_productos" value="buscar_producto">
 		</form>
 		<div class="tabla borde sombra">
 			<nav class="nav-productos">
@@ -22,7 +23,7 @@
 		</div>
 	</div>
 	<div class="panel-derecho">
-		<h2 class="subtitle">Productos seleccionados</h2>
+		<h2 class="subtitle">Productos a vender</h2>
 		<div class="tabla borde sombra">
 			<nav class="nav-venta">
 				<span>Subtotal: S/. 1599.98</span>
@@ -35,7 +36,7 @@
 				<span>Editar</span>
 				<span>Eliminar</span>
 			</nav>
-			<?php for ($i = 0; $i < 50; $i++) { ?>
+			<?php for ($i = 0; $i < 2; $i++) { ?>
 			<div class="prod-sel">
 				<span>Refrigeradora Razer gamer RGB full fps</span>
 				<span class="boton-tabla"><button class="borde sombra button is-dark">+</button></span>
