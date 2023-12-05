@@ -4,8 +4,8 @@
 </div>
 <div class="container pb-6 pt-6">
 	<h2 class="subtitle">Registrar usuarios</h2>
-	<form class="FormularioAjax" action="<?php echo APP_URL; ?>app/ajax/trabajadorAjax.php" method="POST" autocomplete="off" enctype="multipart/form-data" >
-		<input type="hidden" name="nuevo_trabajador" value="registrar">
+	<form class="FormularioAjax" action="<?php echo APP_URL; ?>app/ajax/usuarioAjax.php" method="POST" autocomplete="off" enctype="multipart/form-data" >
+		<input type="hidden" name="nuevo_usuario" value="registrar">
 		<div class="columns">
 		  	<div class="column">
 		    	<div class="control">
@@ -29,7 +29,7 @@
 				<div class="control">
 					<label>
 						clave *
-						<input class="input" type="text" name="usuario_clave_1" pattern="[a-zA-Z0-9$@.-]{6,20}" maxlength="20" required >
+						<input class="input" type="password" name="usuario_clave_1" pattern="[a-zA-Z0-9$@._\-]{5,20}" maxlength="20" required >
 					</label>
 				</div>
 			</div>
@@ -37,7 +37,7 @@
 		    	<div class="control">
 					<label>
 						Repetir clave *
-						<input class="input" type="text" name="usuario_clave_2" pattern="[a-zA-Z0-9$@.-]{6,20}" maxlength="20" required >
+						<input class="input" type="password" name="usuario_clave_2" pattern="[a-zA-Z0-9$@._\-]{5,20}" maxlength="20" required >
 					</label>
 				</div>
 		  	</div>
