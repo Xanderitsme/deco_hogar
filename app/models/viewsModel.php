@@ -5,7 +5,14 @@ class viewsModel {
 
     protected function obtenerVistasModelo($vista) {
         
-        $listaBlanca = ["dashboard", "logout", "productos", "clientes"];
+        $listaBlanca = [
+            "dashboard",
+            "logout",
+            "productos",
+            "clientes",
+            "nuevoTrabajador",
+            "nuevoUsuario"
+        ];
 
         if (in_array($vista, $listaBlanca)) {
             if (is_file("./app/views/content/" . $vista . "-view.php")) {
