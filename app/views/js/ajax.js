@@ -96,6 +96,7 @@ btn_exit.addEventListener("click", function(e) {
         if (result.isConfirmed) {
             
             let url = this.getAttribute("href");
+            window.location.href = url;
         }
     });
 });
