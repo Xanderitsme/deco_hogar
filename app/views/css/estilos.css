@@ -18,6 +18,21 @@ body, html {
     min-width: 300px;
     max-width: 360px;
 }
+.contenedor-imagen {
+    width: 250px;
+    height: 250px;
+}
+.imagen {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 100%;
+    display: grid;
+    place-content: center;
+}
+.imagen img {
+    width: 100%;
+}
 .contenedor-general {
     max-height: 100dvh;
     max-width: 100dvw;
