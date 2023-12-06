@@ -40,24 +40,12 @@ create table if not exists clientes (
     tipo enum('persona natural', 'persona juridica') not null,
     numero_contacto varchar (9) unique,
     fecha_registro date not null default (now()),
+    nombres varchar (60),
+    apellidos varchar (60),
+    DNI varchar (8) unique,
+    denominacion_social varchar (100) unique,
+    RUC varchar (11) unique,
     primary key (ID)
-);
-
--- drop table if exists clientes_per_nat;
-create table if not exists clientes_per_nat (
-    clienteID int not null,
-    nombres varchar (60) not null,
-    apellidos varchar (60) not null,
-    DNI varchar (8) not null unique,
-    foreign key (clienteID) references clientes (ID) on delete cascade
-);
-
--- drop table if exists clientes_per_jur;
-create table if not exists clientes_per_jur (
-    clienteID int not null,
-    denominacion_social varchar (100) not null,
-    RUC varchar (11) not null unique,
-    foreign key (clienteID) references clientes (ID) on delete cascade
 );
 
 -- drop table if exists proveedores;
@@ -180,7 +168,7 @@ create table if not exists cuentas (
     trabajadorID int not null,
     usuario varchar (20) not null unique,
     clave varchar (100) not null,
-    foto text,
+    foto varchar (200),
     foreign key (trabajadorID) references trabajadores (ID) on delete cascade,
     primary key (ID)
 );
