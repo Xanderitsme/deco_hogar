@@ -1,1 +1,3 @@
-Cerrar Sesion
+<?php
+
+$insLogin->cerrarSesionControlador();
