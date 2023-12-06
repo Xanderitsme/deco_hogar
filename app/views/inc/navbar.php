@@ -1,7 +1,7 @@
 <nav class="navbar">
     <div class="navbar-brand">
         <a class="navbar-item" href="<?php echo APP_URL; ?>dashboard/">
-            <div><h1 class="title" style="font-weight: 700;">Deco Hogar</h1></div>
+            <h1 class="title" style="font-weight: 700;">Deco Hogar</h1>
         </a>
         <div class="navbar-burger" data-target="navbarExampleTransparentExample">
             <span></span>
@@ -84,6 +84,9 @@
                     ?>
                 </a>
                 <div class="navbar-dropdown is-boxed">
+                    <a class="navbar-item" href="<?php echo APP_URL . "actualizarUsuario/" . $_SESSION['id'] . "/"; ?>">
+                        Mi cuenta
+                    </a>
                     <a class="navbar-item" href="<?php echo APP_URL; ?>logout/" id="btn_exit" >
                         Salir
                     </a>
