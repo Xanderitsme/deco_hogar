@@ -169,7 +169,7 @@ Eventos generales de la aplicación:
 		(Si / No) ();
 	}
 
------ Administrador almacen -----
+----- Almacenero -----
 
 	Gestionar inventario () {
 		"Interfaz general"
