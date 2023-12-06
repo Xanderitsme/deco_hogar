@@ -20,10 +20,10 @@
                     Productos
                 </a>
                 <div class="navbar-dropdown is-boxed">
-                    <a class="navbar-item" href="#" id="btn_exit" >
+                    <a class="navbar-item" href="#">
                         Nuevo producto
                     </a>
-                    <a class="navbar-item" href="#" id="btn_exit" >
+                    <a class="navbar-item" href="#">
                         Nuevo producto
                     </a>
                 </div>
@@ -33,7 +33,7 @@
                     Clientes
                 </a>
                 <div class="navbar-dropdown is-boxed">
-                    <a class="navbar-item" href="#" id="btn_exit" >
+                    <a class="navbar-item" href="#">
                         Nuevo cliente
                     </a>
                 </div>
@@ -43,7 +43,7 @@
                     Proformas de venta
                 </a>
                 <div class="navbar-dropdown is-boxed">
-                    <a class="navbar-item" href="#" id="btn_exit" >
+                    <a class="navbar-item" href="#">
                         Nueva proforma de venta
                     </a>
                 </div>
@@ -53,7 +53,7 @@
                     Inventario
                 </a>
                 <div class="navbar-dropdown is-boxed">
-                    <a class="navbar-item" href="#" id="btn_exit" >
+                    <a class="navbar-item" href="#">
                         Historial de movimientos de inventario
                     </a>
                 </div>
@@ -63,13 +63,13 @@
                     Trabajadores
                 </a>
                 <div class="navbar-dropdown is-boxed">
-                    <a class="navbar-item" href="<?php echo APP_URL; ?>nuevoTrabajador/" id="btn_exit" >
+                    <a class="navbar-item" href="<?php echo APP_URL; ?>nuevoTrabajador/">
                         Registrar trabajador
                     </a>
-                    <a class="navbar-item" href="#" id="btn_exit" >
+                    <a class="navbar-item" href="#">
                         Usuarios
                     </a>
-                    <a class="navbar-item" href="<?php echo APP_URL; ?>nuevoUsuario/" id="btn_exit" >
+                    <a class="navbar-item" href="<?php echo APP_URL; ?>nuevoUsuario/">
                         Registrar usuario
                     </a>
                 </div>
@@ -79,8 +79,9 @@
         <div class="navbar-end">
             <div class="navbar-item has-dropdown is-hoverable">
                 <a class="navbar-link">
-                    Juan Daniel Rojas Cevallos<br>
-                    Vendedor
+                    <?php 
+                        echo $_SESSION['nombres'] . " " . $_SESSION['apellidos'] . "<br>" . $_SESSION['cargo']; 
+                    ?>
                 </a>
                 <div class="navbar-dropdown is-boxed">
                     <a class="navbar-item" href="<?php echo APP_URL; ?>logout/" id="btn_exit" >
