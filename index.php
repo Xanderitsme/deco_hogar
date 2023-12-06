@@ -18,17 +18,26 @@ if (isset($_GET["views"])) {
     <div class="contenedor-general">
         <?php 
         use app\controllers\viewsController;
-        
+        use app\controllers\loginController;
+
+        $insLogin = new loginController();
+
         $viewsController = new viewsController();
         $vista = $viewsController->obtenerVistasControlador($url[0]);
         
         if ($vista == "login" || $vista == "404") {
             require_once "./app/views/content/" . $vista . "-view.php";
         } else {
+            if (!isset($_SESSION['id']) || !isset($_SESSION['trabajadorId']) 
+                || empty($_SESSION['id']) || empty($_SESSION['trabajadorId'])) {
+
+                $insLogin->cerrarSesionControlador();
+            }
+
             require_once "./app/views/inc/navbar.php";
             require_once $vista;
         }
-        
+
         require_once "./app/views/inc/script.php"; 
         ?>
     </div>
