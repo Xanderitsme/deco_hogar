@@ -178,6 +178,10 @@ class usuarioController extends mainModel {
         return json_encode($alerta);
     }
 
+    public function listarUsuarioControlador() {
+
+    }
+
     private function errorRegistro() {
         $alerta = $this->crearAlertaError("Ha ocurrido un error al intentar registrar los datos del usuario");
         return json_encode($alerta);
