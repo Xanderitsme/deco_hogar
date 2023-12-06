@@ -45,14 +45,14 @@ class usuarioController extends mainModel {
 
         $check_trabajadorId = $this->ejecutarConsulta("select ID from trabajadores where ID = $trabajadorId");
 
-        if (!is_null($check_trabajadorId)) {
-            if ($check_trabajadorId->rowCount() == 0) {
-                $alerta = $this->crearAlertaError("El trabajador ingresado no esta registrado");
-                return json_encode($alerta);
-                exit();
-            }
-        } else {
+        if (is_null($check_trabajadorId)) {
             return $this->errorRegistro();
+            exit();
+        }
+        
+        if ($check_trabajadorId->rowCount() == 0) {
+            $alerta = $this->crearAlertaError("El trabajador ingresado no esta registrado");
+            return json_encode($alerta);
             exit();
         }
 
@@ -60,26 +60,27 @@ class usuarioController extends mainModel {
 
         // $check_cuenta_registrada = $this->ejecutarConsulta("select trabajadorID from cuentas where trabajadorID = $trabajadorId");
 
-        // if (!is_null($check_cuenta_registrada)) {
-        //     if ($check_cuenta_registrada->rowCount() > 0) {
-        //         $alerta = $this->crearAlertaError("El trabajador ingresado ya tiene una cuenta registrada");
-        //         return json_encode($alerta);
-        //         exit();
-        //     }
-        // } else {
+        // if (is_null($check_cuenta_registrada)) {
         //     return $this->errorRegistro();
         //     exit();
         // }
+        
+        // if ($check_cuenta_registrada->rowCount() > 0) {
+        //     $alerta = $this->crearAlertaError("El trabajador ingresado ya tiene una cuenta registrada");
+        //     return json_encode($alerta);
+        //     exit();
+        // }
 
-        $check_usuario = $this->ejecutarConsulta("select usuario from cuentas where usuario like '$usuario'");
-        if (!is_null($check_usuario)) {
-            if ($check_usuario->rowCount() > 0) {
-                $alerta = $this->crearAlertaError("El nombre de usuario ingresado ya se encuentra registrado");
-                return json_encode($alerta);
-                exit();
-            }
-        } else {
+        $check_usuario = $this->ejecutarConsulta("select usuario from cuentas where usuario = '$usuario'");
+
+        if (is_null($check_usuario)) {
             return $this->errorRegistro();
+            exit();
+        }
+
+        if ($check_usuario->rowCount() > 0) {
+            $alerta = $this->crearAlertaError("El nombre de usuario ingresado ya se encuentra registrado");
+            return json_encode($alerta);
             exit();
         }
 
@@ -131,7 +132,7 @@ class usuarioController extends mainModel {
 
         $usuario_datos_reg = [
             [
-                "campo_nombre" => "trabajadorId",
+                "campo_nombre" => "trabajadorID",
                 "campo_marcador" => ":trabajadorId",
                 "campo_valor" => $trabajadorId
             ],

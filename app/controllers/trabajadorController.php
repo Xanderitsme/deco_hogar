@@ -159,7 +159,7 @@ class trabajadorController extends mainModel {
                 "campo_valor" => $sueldo
             ],
             [
-                "campo_nombre" => "cargoId",
+                "campo_nombre" => "cargoID",
                 "campo_marcador" => ":cargoId",
                 "campo_valor" => $cargoId
             ],

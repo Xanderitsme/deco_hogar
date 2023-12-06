@@ -124,8 +124,8 @@ class mainModel {
         
         try {    
             if ($tipo == "Unico") {
-                $sql = $this->conectar()->prepare("select * from $tabla where $campo = :ID");
-                $sql->bindParam(":ID", $id, PDO::PARAM_INT);
+                $sql = $this->conectar()->prepare("select * from $tabla where $campo = :id");
+                $sql->bindParam(":id", $id, PDO::PARAM_INT);
             } elseif ($tipo == "Normal") {
                 $sql = $this->conectar()->prepare("select $campo from $tabla");
             }
