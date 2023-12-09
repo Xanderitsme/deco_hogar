@@ -5,13 +5,18 @@ require_once "../../autoload.php";
 
 use app\controllers\usuarioController;
 
-if (isset($_POST["nuevo_usuario"])) {
+if (isset($_POST["modulo_usuario"])) {
 
     $insUsuario = new usuarioController();
 
-    if ($_POST["nuevo_usuario"] == "registrar") {
+    if ($_POST["modulo_usuario"] == "registrar") {
         echo $insUsuario->registrarUsuarioControlador();
     }
+
+    if ($_POST["modulo_usuario"] == "eliminar") {
+        echo $insUsuario->eliminarUsuarioControlador();
+    }
+
 
 } else {
     session_destroy();
