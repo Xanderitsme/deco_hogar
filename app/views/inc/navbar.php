@@ -66,7 +66,7 @@
                     <a class="navbar-item" href="<?php echo APP_URL; ?>nuevoTrabajador/">
                         Registrar trabajador
                     </a>
-                    <a class="navbar-item" href="#">
+                    <a class="navbar-item" href="<?php echo APP_URL; ?>listaUsuarios/">
                         Usuarios
                     </a>
                     <a class="navbar-item" href="<?php echo APP_URL; ?>nuevoUsuario/">
