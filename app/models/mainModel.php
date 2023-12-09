@@ -250,4 +250,29 @@ class mainModel {
 
         return $alerta;
     }
+
+    protected function mostrarError($mensajeAlerta) {
+        return "
+            <script>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Ocurrió un error inesperado',
+                    text: '" . $mensajeAlerta . "',
+                    confirmButtonText: 'Aceptar'
+                });
+            </script>
+        ";
+    }
+
+    protected function crearAlertaRecargar($titulo, $mensajeAlerta) {
+        $alerta = [
+            "tipo" => "recargar",
+            "titulo" => $titulo,
+            "texto" => $mensajeAlerta,
+            "icono" => "success"
+        ];
+
+        return $alerta;
+    }
+
 }
