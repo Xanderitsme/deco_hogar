@@ -1,11 +1,11 @@
 <div class="borde"></div>
-<div class="container is-fluid mb-6">
-	<h1 class="title pt-6">Usuarios</h1>
+<div class="container is-fluid mt-6">
+	<h1 class="title">Usuarios</h1>
 </div>
 <div class="container pb-6 pt-6">
-	<h2 class="subtitle">Registrar usuarios</h2>
+	<h2 class="subtitle">Registrar usuario</h2>
 	<form class="FormularioAjax" action="<?php echo APP_URL; ?>app/ajax/usuarioAjax.php" method="POST" autocomplete="off" enctype="multipart/form-data" >
-		<input type="hidden" name="nuevo_usuario" value="registrar">
+		<input type="hidden" name="modulo_usuario" value="registrar">
 		<div class="columns">
 		  	<div class="column">
 		    	<div class="control">
