@@ -9,13 +9,6 @@ create table if not exists cargos (
     primary key (ID)
 );
 
-insert into cargos (nombre_cargo) values 
-("Administrador"),
-("Almacenero"),
-("Vendedor"),
-("Cajero"),
-("Cargador");
-
 -- drop table if exists trabajadores;
 create table if not exists trabajadores (
     ID int auto_increment,
@@ -30,9 +23,6 @@ create table if not exists trabajadores (
     foreign key (cargoID) references cargos (ID) on delete cascade,
     primary key (ID)
 );
-
-insert into trabajadores (nombres, apellidos, dni, sueldo, telefono, email, fecha_contratacion, `cargoID`) values
-("Kyle", "Soda", "12345678", 12500,'123456789', 'kylesoda@dominio.com', date(now()), 1);
 
 -- drop table if exists clientes;
 create table if not exists clientes (
@@ -59,10 +49,6 @@ create table if not exists proveedores (
     ubicacion varchar (60) not null,
     primary key (ID)
 );
-
--- https://importacionesrubi.com.pe/
--- insert into proveedores (denominacion_social, `RUC`, tiempo_envio, ubicacion) values
--- ("IMPORTACIONES RUBI S.A.", "20298463165", 15, "Cercado de Lima");
 
 -- drop table if exists productos;
 create table if not exists productos (
