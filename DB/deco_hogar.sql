@@ -97,6 +97,7 @@ create table if not exists ventas (
     primary key (ID)
 );
 
+-- Tal vez falte codigo del producto devuelto o cantidad
 -- drop table if exists devoluciones;
 create table if not exists devoluciones (
     ID int auto_increment,
