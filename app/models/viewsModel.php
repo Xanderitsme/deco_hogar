@@ -13,7 +13,9 @@ class viewsModel {
             "nuevoTrabajador",
             "nuevoUsuario",
             "actualizarUsuario",
-            "listaUsuarios"
+            "listaUsuarios",
+            "listaTrabajadores",
+            "actualizarTrabajador"
         ];
 
         if (in_array($vista, $listaBlanca)) {
