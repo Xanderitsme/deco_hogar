@@ -34,7 +34,8 @@ class mainModel
         try {
             $sql = $this->conectar()->prepare($consulta);
             $sql->execute();
-        } catch (Exception) {
+        } catch (Exception $e) {
+            // echo "Error: " . $e;
             $sql = null;
         }
 
