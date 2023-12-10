@@ -368,18 +368,15 @@ class usuarioController extends mainModel
     }
 
     $datos = $this->ejecutarConsulta("
-            select
-                cuentas.ID,
+            select 
                 cuentas.usuario,
                 cuentas.foto, 
                 trabajadores.nombres,
-                trabajadores.apellidos,
-                cargos.nombre_cargo
+                trabajadores.apellidos
             from cuentas
             join trabajadores on cuentas.trabajadorID = trabajadores.ID
-            join cargos on trabajadores.cargoID = cargos.ID
             where cuentas.ID <> 1
-            and cuentas.ID = '$id'
+            and cuentas.ID = $id
         ");
 
     if (is_null($datos)) {
@@ -388,13 +385,13 @@ class usuarioController extends mainModel
       exit();
     }
 
-    if ($datos->rowCount() <= 0) {
+    if ($datos->rowCount() == 0) {
       $alerta = $this->crearAlertaError('No pudimos encontrar ese usuario en el sistema');
       return json_encode($alerta);
       exit();
-    } else {
-      $datos = $datos->fetch(PDO::FETCH_ASSOC);
     }
+      
+    $datos = $datos->fetch(PDO::FETCH_ASSOC);
 
     $eliminarUsuario = $this->eliminarRegistro("cuentas", "ID", $id);
 
@@ -410,9 +407,9 @@ class usuarioController extends mainModel
         unlink("../views/fotos/" . $datos['foto']);
       }
 
-      $alerta = $this->crearAlertaRecargar("Usuario eliminado", "El usuario " . $datos['nombres'] . " " . $datos['apellidos'] . " se eliminó con éxito");
+      $alerta = $this->crearAlertaRecargar("Usuario eliminado", "El usuario " . $datos['usuario'] . " (" . $datos['nombres'] . " " . $datos['apellidos'] .") se eliminó con éxito");
     } else {
-      $alerta = $this->crearAlertaError("No se pudo eliminar el usuario "  . $datos['nombres'] . " " . $datos['apellidos'] . ", por favor intente nuevamente");
+      $alerta = $this->crearAlertaError("No se pudo eliminar el usuario "  . $datos['usuario'] . " (" . $datos['nombres'] . " " . $datos['apellidos'] ."), por favor intente nuevamente");
     }
 
     return json_encode($alerta);
@@ -614,64 +611,64 @@ class usuarioController extends mainModel
 
     if (isset($busqueda) && !empty($busqueda)) {
       $consulta_datos = "
-                select
-                    trabajadores.ID,
-                    trabajadores.nombres,
-                    trabajadores.apellidos,
-                    trabajadores.dni,
-                    trabajadores.telefono,
-                    trabajadores.email,
-                    trabajadores.fecha_contratacion,
-                    trabajadores.sueldo,
-                    cargos.nombre_cargo
-                from trabajadores 
-                join cargos on trabajadores.cargoID = cargos.ID
-                where trabajadores.ID <> " . $_SESSION['id'] . "
-                and trabajadores.ID <> 1
-                and (
-                    trabajadores.nombres like '%" . $busqueda . "%'
-                    or trabajadores.apellidos like '%" . $busqueda . "%'
-                    or cargos.nombre_cargo like '%" . $busqueda . "%'
-                    or trabajadores.dni like '%" . $busqueda . "%'
-                    or trabajadores.telefono like '%" . $busqueda . "%'
-                    or trabajadores.email like '%" . $busqueda . "%'
-                )
-                order by apellidos asc limit " . $inicio . ", " . $registros;
+        select
+            trabajadores.ID,
+            trabajadores.nombres,
+            trabajadores.apellidos,
+            trabajadores.dni,
+            trabajadores.telefono,
+            trabajadores.email,
+            trabajadores.fecha_contratacion,
+            trabajadores.sueldo,
+            cargos.nombre_cargo
+        from trabajadores 
+        join cargos on trabajadores.cargoID = cargos.ID
+        where trabajadores.ID <> " . $_SESSION['id'] . "
+        and trabajadores.ID <> 1
+        and (
+            trabajadores.nombres like '%" . $busqueda . "%'
+            or trabajadores.apellidos like '%" . $busqueda . "%'
+            or cargos.nombre_cargo like '%" . $busqueda . "%'
+            or trabajadores.dni like '%" . $busqueda . "%'
+            or trabajadores.telefono like '%" . $busqueda . "%'
+            or trabajadores.email like '%" . $busqueda . "%'
+        )
+        order by apellidos asc limit " . $inicio . ", " . $registros;
 
       $consulta_total = "
-                select count(*) as total from trabajadores 
-                where trabajadores.ID <> " . $_SESSION['id'] . "
-                and trabajadores.ID <> 1 
-                and (
-                    trabajadores.nombres like '%" . $busqueda . "%'
-                    or trabajadores.apellidos like '%" . $busqueda . "%'
-                    or cargos.nombre_cargo like '%" . $busqueda . "%'
-                    or trabajadores.dni like '%" . $busqueda . "%'
-                    or trabajadores.telefono like '%" . $busqueda . "%'
-                    or trabajadores.email like '%" . $busqueda . "%'
-                )";
+        select count(*) as total from trabajadores 
+        where trabajadores.ID <> " . $_SESSION['id'] . "
+        and trabajadores.ID <> 1 
+        and (
+            trabajadores.nombres like '%" . $busqueda . "%'
+            or trabajadores.apellidos like '%" . $busqueda . "%'
+            or cargos.nombre_cargo like '%" . $busqueda . "%'
+            or trabajadores.dni like '%" . $busqueda . "%'
+            or trabajadores.telefono like '%" . $busqueda . "%'
+            or trabajadores.email like '%" . $busqueda . "%'
+        )";
     } else {
       $consulta_datos = "
-                select
-                    trabajadores.ID,
-                    trabajadores.nombres,
-                    trabajadores.apellidos,
-                    trabajadores.dni,
-                    trabajadores.telefono,
-                    trabajadores.email,
-                    trabajadores.fecha_contratacion,
-                    trabajadores.sueldo,
-                    cargos.nombre_cargo
-                from trabajadores 
-                join cargos on trabajadores.cargoID = cargos.ID
-                where trabajadores.ID <> " . $_SESSION['id'] . "
-                and trabajadores.ID <> 1
-                order by apellidos asc limit " . $inicio . ", " . $registros;
+        select
+            trabajadores.ID,
+            trabajadores.nombres,
+            trabajadores.apellidos,
+            trabajadores.dni,
+            trabajadores.telefono,
+            trabajadores.email,
+            trabajadores.fecha_contratacion,
+            trabajadores.sueldo,
+            cargos.nombre_cargo
+        from trabajadores 
+        join cargos on trabajadores.cargoID = cargos.ID
+        where trabajadores.ID <> " . $_SESSION['id'] . "
+        and trabajadores.ID <> 1
+        order by apellidos asc limit " . $inicio . ", " . $registros;
 
       $consulta_total = "
-            select count(*) as total from trabajadores 
-            where trabajadores.ID <> " . $_SESSION['id'] . "
-            and trabajadores.ID <> 1";
+        select count(*) as total from trabajadores 
+        where trabajadores.ID <> " . $_SESSION['id'] . "
+        and trabajadores.ID <> 1";
     }
 
     $datos = $this->ejecutarConsulta($consulta_datos);
@@ -695,24 +692,24 @@ class usuarioController extends mainModel
     $numeroPaginas = ceil($total / $registros);
 
     $tabla .= '
-        <div class="table-container">
+      <div class="table-container">
         <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
-            <thead>
-                <tr>
-                    <th class="has-text-centered">#</th>
-                    <th class="has-text-centered">Nombres</th>
-                    <th class="has-text-centered">Apellidos</th>
-                    <th class="has-text-centered">DNI</th>
-                    <th class="has-text-centered">Teléfono</th>
-                    <th class="has-text-centered">Correo electrónico</th>
-                    <th class="has-text-centered">Cargo</th>
-                    <th class="has-text-centered">Fecha de contratación</th>
-                    <th class="has-text-centered">Sueldo</th>
-                    <th class="has-text-centered" colspan="2">Opciones</th>
-                </tr>
-            </thead>
-            <tbody>
-        ';
+          <thead>
+            <tr>
+              <th class="has-text-centered">#</th>
+              <th class="has-text-centered">Nombres</th>
+              <th class="has-text-centered">Apellidos</th>
+              <th class="has-text-centered">DNI</th>
+              <th class="has-text-centered">Teléfono</th>
+              <th class="has-text-centered">Correo electrónico</th>
+              <th class="has-text-centered">Cargo</th>
+              <th class="has-text-centered">Fecha de contratación</th>
+              <th class="has-text-centered">Sueldo</th>
+              <th class="has-text-centered" colspan="2">Opciones</th>
+            </tr>
+          </thead>
+          <tbody>
+    ';
 
     if ($total >= 1 && $pagina <= $numeroPaginas) {
       $contador = $inicio + 1;
@@ -786,7 +783,6 @@ class usuarioController extends mainModel
     return $tabla;
   }
 
-  // Falta implementarlo correctamente
   public function eliminarTrabajadorControlador()
   {
     $id = $this->limpiarCadena($_POST['trabajador_id']);
@@ -797,52 +793,57 @@ class usuarioController extends mainModel
       exit();
     }
 
-    $datos = $this->ejecutarConsulta("
-            select
-                cuentas.ID,
-                cuentas.usuario,
-                cuentas.foto, 
-                trabajadores.nombres,
-                trabajadores.apellidos,
-                cargos.nombre_cargo
-            from cuentas
-            join trabajadores on cuentas.trabajadorID = trabajadores.ID
-            join cargos on trabajadores.cargoID = cargos.ID
-            where cuentas.ID <> 1
-            and cuentas.ID = '$id'
-        ");
+    $datosTrabajador = $this->ejecutarConsulta("
+      select 
+        trabajadores.nombres,
+        trabajadores.apellidos 
+      from trabajadores 
+      where trabajadores.ID <> 1 
+      and trabajadores.ID = $id
+    ");
 
-    if (is_null($datos)) {
-      $alerta = $this->crearAlertaError('Ha ocurrido un error al intentar cargar los datos del usuario');
+    $datosCuenta = $this->ejecutarConsulta("
+      select 
+        cuentas.foto
+      from cuentas 
+      where cuentas.ID <> 1 
+      and cuentas.trabajadorID = $id
+    ");
+
+    if (is_null($datosTrabajador) || is_null($datosCuenta)) {
+      $alerta = $this->crearAlertaError('Ha ocurrido un error al intentar cargar los datos del trabajador');
       return json_encode($alerta);
       exit();
     }
 
-    if ($datos->rowCount() <= 0) {
-      $alerta = $this->crearAlertaError('No pudimos encontrar ese usuario en el sistema');
+    if ($datosTrabajador->rowCount() == 0) {
+      $alerta = $this->crearAlertaError('No pudimos encontrar ese trabajador en el sistema');
       return json_encode($alerta);
       exit();
-    } else {
-      $datos = $datos->fetch(PDO::FETCH_ASSOC);
     }
 
-    $eliminarUsuario = $this->eliminarRegistro("cuentas", "ID", $id);
+    $datosTrabajador = $datosTrabajador->fetch(PDO::FETCH_ASSOC);
 
-    if (is_null($eliminarUsuario)) {
+    $eliminarTrabajador = $this->eliminarRegistro("trabajadores", "ID", $id);
+
+    if (is_null($eliminarTrabajador)) {
       $alerta = $this->crearAlertaError('Ha ocurrido un error al intentar eliminar el usuario');
       return json_encode($alerta);
       exit();
     }
 
-    if ($eliminarUsuario->rowCount() == 1) {
-      if (is_file("../views/fotos/" . $datos['foto'])) {
-        chmod("../views/fotos/" . $datos['foto'], 0777);
-        unlink("../views/fotos/" . $datos['foto']);
+    if ($eliminarTrabajador->rowCount() == 1) {  
+      if ($datosCuenta->rowCount() > 0) {
+        $datosCuenta = $datosCuenta->fetch(PDO::FETCH_ASSOC);
+        if (is_file("../views/fotos/" . $datosCuenta['foto'])) {
+          chmod("../views/fotos/" . $datosCuenta['foto'], 0777);
+          unlink("../views/fotos/" . $datosCuenta['foto']);
+        }
       }
 
-      $alerta = $this->crearAlertaRecargar("Usuario eliminado", "El usuario " . $datos['nombres'] . " " . $datos['apellidos'] . " se eliminó con éxito");
+      $alerta = $this->crearAlertaRecargar("Trabajador eliminado", "El trabajador " . $datosTrabajador['nombres'] . " " . $datosTrabajador['apellidos'] . " se eliminó con éxito");
     } else {
-      $alerta = $this->crearAlertaError("No se pudo eliminar el usuario "  . $datos['nombres'] . " " . $datos['apellidos'] . ", por favor intente nuevamente");
+      $alerta = $this->crearAlertaError("No se pudo eliminar el usuario "  . $datosTrabajador['nombres'] . " " . $datosTrabajador['apellidos'] . ", por favor intente nuevamente");
     }
 
     return json_encode($alerta);
