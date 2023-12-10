@@ -12,6 +12,6 @@
 
 		$insUsuario = new usuarioController();
 
-		echo $insUsuario->listarUsuarioControlador($url[1], 10, $url[0], "");
+		echo $insUsuario->listarUsuariosControlador($url[1], 10, $url[0], "");
 	?>
 </div>
