@@ -13,12 +13,12 @@
 				<span>Agregar</span>
 			</nav>
 			<?php for ($i = 0; $i < 50; $i++) { ?>
-			<div class="detalles-producto">
-				<span>Refrigeradora Razer gamer RGB full fps</span>
-				<span>No disponible</span>
-				<span>S. 1799.99</span>
-				<span class="boton-tabla"><button class="borde sombra button is-dark">+</button></span>
-			</div>
+				<div class="detalles-producto">
+					<span>Refrigeradora Razer gamer RGB full fps</span>
+					<span>No disponible</span>
+					<span>S. 1799.99</span>
+					<span class="boton-tabla"><button class="borde sombra button is-dark">+</button></span>
+				</div>
 			<?php } ?>
 		</div>
 	</div>
@@ -37,11 +37,11 @@
 				<span>Eliminar</span>
 			</nav>
 			<?php for ($i = 0; $i < 2; $i++) { ?>
-			<div class="prod-sel">
-				<span>Refrigeradora Razer gamer RGB full fps</span>
-				<span class="boton-tabla"><button class="borde sombra button is-dark">+</button></span>
-				<span class="boton-tabla"><button class="borde sombra button is-dark">+</button></span>
-			</div>
+				<div class="prod-sel">
+					<span>Refrigeradora Razer gamer RGB full fps</span>
+					<span class="boton-tabla"><button class="borde sombra button is-dark">+</button></span>
+					<span class="boton-tabla"><button class="borde sombra button is-dark">+</button></span>
+				</div>
 			<?php } ?>
 		</div>
 	</div>

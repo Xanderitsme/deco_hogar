@@ -4,42 +4,44 @@ require_once "./autoload.php";
 require_once "./app/views/inc/session_start.php";
 
 if (isset($_GET["views"])) {
-    $url = explode("/", $_GET["views"]);
+  $url = explode("/", $_GET["views"]);
 } else {
-    $url = ["login"];
+  $url = ["login"];
 }
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-    <?php require_once "./app/views/inc/head.php"; ?>
+  <?php require_once "./app/views/inc/head.php"; ?>
 </head>
+
 <body>
-    <div class="contenedor-general">
-        <?php 
-        use app\controllers\viewsController;
-        use app\controllers\loginController;
+  <div class="contenedor-general">
+    <?php
 
-        $insLogin = new loginController();
+    use app\controllers\viewsController;
+    use app\controllers\loginController;
 
-        $viewsController = new viewsController();
-        $vista = $viewsController->obtenerVistasControlador($url[0]);
-        
-        if ($vista == "login" || $vista == "404") {
-            require_once "./app/views/content/" . $vista . "-view.php";
-        } else {
-            if (!isset($_SESSION['id']) || !isset($_SESSION['trabajadorId']) 
-                || empty($_SESSION['id']) || empty($_SESSION['trabajadorId'])) {
+    $insLogin = new loginController();
 
-                $insLogin->cerrarSesionControlador();
-            }
+    $viewsController = new viewsController();
+    $vista = $viewsController->obtenerVistasControlador($url[0]);
 
-            require_once "./app/views/inc/navbar.php";
-            require_once $vista;
-        }
+    if ($vista == "login" || $vista == "404") {
+      require_once "./app/views/content/" . $vista . "-view.php";
+    } else {
+      if (!isset($_SESSION['id']) || !isset($_SESSION['trabajadorId']) || empty($_SESSION['id']) || empty($_SESSION['trabajadorId'])) {
+        $insLogin->cerrarSesionControlador();
+      }
 
-        require_once "./app/views/inc/script.php"; 
-        ?>
-    </div>
+      require_once "./app/views/inc/navbar.php";
+      require_once $vista;
+    }
+
+    require_once "./app/views/inc/script.php";
+    ?>
+  </div>
 </body>
+
 </html>

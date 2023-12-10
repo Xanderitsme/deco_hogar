@@ -1,4 +1,5 @@
 <?php
+
 namespace app\models;
 
 use Exception;
@@ -8,25 +9,28 @@ if (file_exists(__DIR__ . "/../../config/server.php")) {
     require_once __DIR__ . "/../../config/server.php";
 }
 
-class mainModel {
-    
+class mainModel
+{
+
     private $server = DB_SERVER;
     private $db = DB_NAME;
     private $user = DB_USER;
     private $pass = DB_PASS;
 
-    protected function conectar() {
-        try{
-            $conexion = new PDO("mysql:host=" . $this->server . ";dbname=". $this->db, $this->user, $this->pass);
+    protected function conectar()
+    {
+        try {
+            $conexion = new PDO("mysql:host=" . $this->server . ";dbname=" . $this->db, $this->user, $this->pass);
             $conexion->exec("SET CHARACTER SET utf8");
-            $conexion->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+            $conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             return $conexion;
-        } catch (Exception $ex){
+        } catch (Exception $ex) {
             echo $ex->getMessage();
         }
     }
 
-    protected function ejecutarConsulta($consulta) {
+    protected function ejecutarConsulta($consulta)
+    {
         try {
             $sql = $this->conectar()->prepare($consulta);
             $sql->execute();
@@ -37,8 +41,9 @@ class mainModel {
         return $sql;
     }
 
-    public function limpiarCadena($cadena) {
-        $palabras=[
+    public function limpiarCadena($cadena)
+    {
+        $palabras = [
             "<script>",
             "</script>",
             "<script src",
@@ -75,7 +80,8 @@ class mainModel {
         return $cadena;
     }
 
-    protected function verificarDatos($filtro, $cadena) {
+    protected function verificarDatos($filtro, $cadena)
+    {
         if (preg_match("/^" . $filtro . "$/", $cadena)) {
             return false;
         }
@@ -83,22 +89,27 @@ class mainModel {
         return true;
     }
 
-    protected function guardarDatos ($tabla, $datos) {
+    protected function guardarDatos($tabla, $datos)
+    {
 
         $query = "insert into $tabla (";
 
         $contador = 0;
         foreach ($datos as $clave) {
-            if( $contador >= 1) { $query .= ","; }
+            if ($contador >= 1) {
+                $query .= ",";
+            }
             $query .= $clave["campo_nombre"];
             $contador++;
         }
-        
+
         $query .= ") values(";
 
         $contador = 0;
         foreach ($datos as $clave) {
-            if ($contador >= 1) { $query .= ","; }
+            if ($contador >= 1) {
+                $query .= ",";
+            }
             $query .= $clave["campo_marcador"];
             $contador++;
         }
@@ -107,7 +118,9 @@ class mainModel {
 
         try {
             $sql = $this->conectar()->prepare($query);
-            foreach ($datos as $clave) { $sql->bindParam($clave["campo_marcador"], $clave["campo_valor"]); }
+            foreach ($datos as $clave) {
+                $sql->bindParam($clave["campo_marcador"], $clave["campo_valor"]);
+            }
             $sql->execute();
         } catch (Exception) {
             $sql = null;
@@ -116,13 +129,14 @@ class mainModel {
         return $sql;
     }
 
-    public function seleccionarDatos($tipo, $tabla, $campo, $id) {
+    public function seleccionarDatos($tipo, $tabla, $campo, $id)
+    {
         $tipo = $this->limpiarCadena($tipo);
         $tabla = $this->limpiarCadena($tabla);
         $campo = $this->limpiarCadena($campo);
         $id = $this->limpiarCadena($id);
-        
-        try {    
+
+        try {
             if ($tipo == "Unico") {
                 $sql = $this->conectar()->prepare("select * from $tabla where $campo = :id");
                 $sql->bindParam(":id", $id, PDO::PARAM_INT);
@@ -134,16 +148,19 @@ class mainModel {
         } catch (Exception) {
             $sql = null;
         }
-        
+
         return $sql;
     }
 
-    protected function actualizarDatos($tabla, $datos, $condicion) {
+    protected function actualizarDatos($tabla, $datos, $condicion)
+    {
         $query = "update $tabla set ";
 
         $contador = 0;
         foreach ($datos as $clave) {
-            if ($contador >= 1) { $query .= ","; }
+            if ($contador >= 1) {
+                $query .= ",";
+            }
             $query .= $clave["campo_nombre"] . "=" . $clave["campo_marcador"];
             $contador++;
         }
@@ -153,7 +170,9 @@ class mainModel {
         try {
             $sql = $this->conectar()->prepare($query);
 
-            foreach ($datos as $clave) { $sql->bindParam($clave["campo_marcador"], $clave["campo_valor"]); }
+            foreach ($datos as $clave) {
+                $sql->bindParam($clave["campo_marcador"], $clave["campo_valor"]);
+            }
             $sql->bindParam($condicion["condicion_marcador"], $condicion["condicion_valor"]);
 
             $sql->execute();
@@ -164,7 +183,8 @@ class mainModel {
         return $sql;
     }
 
-    protected function eliminarRegistro($tabla, $campo, $id){
+    protected function eliminarRegistro($tabla, $campo, $id)
+    {
         try {
             $sql = $this->conectar()->prepare("delete from $tabla where $campo= :id");
             $sql->bindParam(":id", $id);
@@ -176,17 +196,18 @@ class mainModel {
         return $sql;
     }
 
-    protected function paginadorTablas($pagina, $numeroPaginas, $url, $botones){
+    protected function paginadorTablas($pagina, $numeroPaginas, $url, $botones)
+    {
         $tabla = '<nav class="pagination is-centered is-rounded" role="navigation" aria-label="pagination">';
 
-        if($pagina <= 1){
+        if ($pagina <= 1) {
             $tabla .= '
             <a class="pagination-previous is-disabled" disabled >Anterior</a>
             <ul class="pagination-list">
             ';
-        }else{
+        } else {
             $tabla .= '
-            <a class="pagination-previous" href="' . $url . ($pagina-1) . '/">Anterior</a>
+            <a class="pagination-previous" href="' . $url . ($pagina - 1) . '/">Anterior</a>
             <ul class="pagination-list">
                 <li><a class="pagination-link" href="' . $url . '1/">1</a></li>
                 <li><span class="pagination-ellipsis">&hellip;</span></li>
@@ -195,15 +216,15 @@ class mainModel {
 
 
         $ci = 0;
-        for($i = $pagina; $i <= $numeroPaginas; $i++){
+        for ($i = $pagina; $i <= $numeroPaginas; $i++) {
 
-            if($ci >= $botones){
+            if ($ci >= $botones) {
                 break;
             }
 
-            if($pagina == $i){
+            if ($pagina == $i) {
                 $tabla .= '<li><a class="pagination-link is-current" href="' . $url . $i . '/">' . $i . '</a></li>';
-            }else{
+            } else {
                 $tabla .= '<li><a class="pagination-link" href="' . $url . $i . '/">' . $i . '</a></li>';
             }
 
@@ -211,17 +232,17 @@ class mainModel {
         }
 
 
-        if($pagina == $numeroPaginas){
+        if ($pagina == $numeroPaginas) {
             $tabla .= '
             </ul>
             <a class="pagination-next is-disabled" disabled >Siguiente</a>
             ';
-        }else{
+        } else {
             $tabla .= '
                 <li><span class="pagination-ellipsis">&hellip;</span></li>
                 <li><a class="pagination-link" href="' . $url . $numeroPaginas . '/">' . $numeroPaginas . '</a></li>
             </ul>
-            <a class="pagination-next" href="' . $url . ($pagina+1) . '/">Siguiente</a>
+            <a class="pagination-next" href="' . $url . ($pagina + 1) . '/">Siguiente</a>
             ';
         }
 
@@ -229,7 +250,8 @@ class mainModel {
         return $tabla;
     }
 
-    protected function crearAlertaError($mensajeAlerta) {
+    protected function crearAlertaError($mensajeAlerta)
+    {
         $alerta = [
             "tipo" => "simple",
             "titulo" => "Ocurrió un error inesperado",
@@ -240,7 +262,8 @@ class mainModel {
         return $alerta;
     }
 
-    protected function crearAlertaLimpiarSuccess($titulo, $mensajeAlerta) {
+    protected function crearAlertaLimpiarSuccess($titulo, $mensajeAlerta)
+    {
         $alerta = [
             "tipo" => "limpiar",
             "titulo" => $titulo,
@@ -251,7 +274,8 @@ class mainModel {
         return $alerta;
     }
 
-    protected function mostrarError($mensajeAlerta) {
+    protected function mostrarError($mensajeAlerta)
+    {
         return "
             <script>
                 Swal.fire({
@@ -264,7 +288,8 @@ class mainModel {
         ";
     }
 
-    protected function crearAlertaRecargar($titulo, $mensajeAlerta) {
+    protected function crearAlertaRecargar($titulo, $mensajeAlerta)
+    {
         $alerta = [
             "tipo" => "recargar",
             "titulo" => $titulo,
@@ -274,5 +299,4 @@ class mainModel {
 
         return $alerta;
     }
-
 }

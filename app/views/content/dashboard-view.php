@@ -3,11 +3,11 @@
 		<div class="contenedor-imagen">
 			<figure class="imagen">
 				<?php
-					if (is_file("app/views/fotos/" . $_SESSION["foto"])) {
-						echo '<img src="' . APP_URL . 'app/views/fotos/' . $_SESSION["foto"] .'" alt="foto de perfil del usuario">';
-					} else {
-						echo '<img src="' . APP_URL . 'app/views/fotos/default.png" alt="foto de perfil del usuario">';
-					}
+				if (is_file("app/views/fotos/" . $_SESSION["foto"])) {
+					echo '<img src="' . APP_URL . 'app/views/fotos/' . $_SESSION["foto"] . '" alt="foto de perfil del usuario">';
+				} else {
+					echo '<img src="' . APP_URL . 'app/views/fotos/default.png" alt="foto de perfil del usuario">';
+				}
 				?>
 			</figure>
 		</div>

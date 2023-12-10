@@ -1,138 +1,165 @@
-body, html {
-    margin: 0;
-    overflow: hidden;
-    width: 100dvw;
-    height: 100dvh;
+body,
+html {
+  margin: 0;
+  overflow: hidden;
+  width: 100dvw;
+  height: 100dvh;
 }
+
 .main-container {
-    height: 100dvh;
-    width: 100dvw;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  height: 100dvh;
+  width: 100dvw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-.main-container > .login,
-.main-container > .hero-body {
-    height: auto;
-    width: 100%;
-    min-width: 300px;
-    max-width: 360px;
+
+.main-container>.login,
+.main-container>.hero-body {
+  height: auto;
+  width: 100%;
+  min-width: 300px;
+  max-width: 360px;
 }
+
 .contenedor-imagen {
-    width: 250px;
-    height: 250px;
+  width: 250px;
+  height: 250px;
 }
+
 .imagen {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    border-radius: 100%;
-    display: grid;
-    justify-content: center;
-    align-items: center;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 100%;
+  display: grid;
+  justify-content: center;
+  align-items: center;
 }
+
 .imagen img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
+
 .contenedor-general {
-    max-height: 100dvh;
-    max-width: 100dvw;
+  max-height: 100dvh;
+  max-width: 100dvw;
 }
+
 .borde {
-    border: none;
-    outline: 1px solid hsl(0, 0%, 90%);
-    border-radius: 4px;
+  border: none;
+  outline: 1px solid hsl(0, 0%, 90%);
+  border-radius: 4px;
 }
+
 .sombra {
-    box-shadow: 0px 0px 5px hsl(0, 0%, 90%);
+  box-shadow: 0px 0px 5px hsl(0, 0%, 90%);
 }
+
 .buscador {
-    height: 30px;
-    font-size: 1em;
-    width: 100%;
-    padding-left: 10px;
+  height: 30px;
+  font-size: 1em;
+  width: 100%;
+  padding-left: 10px;
 }
+
 .buscador:hover {
-    background-color: hsl(0, 0%, 95%);
+  background-color: hsl(0, 0%, 95%);
 }
+
 .buscador:focus-visible {
-    background-color: hsl(0, 0%, 95%);
+  background-color: hsl(0, 0%, 95%);
 }
+
 .tabla {
-    margin-top: 20px;
-    height: auto;
-    display: flex;
-    flex-flow: column nowrap;
+  margin-top: 20px;
+  height: auto;
+  display: flex;
+  flex-flow: column nowrap;
 }
-.tabla > nav {
-    display: grid;
-    padding: 4px 10px;
-    min-height: 30px;
-    align-items: center;
-    border-bottom: 1px solid hsl(0, 0%, 90%);
+
+.tabla>nav {
+  display: grid;
+  padding: 4px 10px;
+  min-height: 30px;
+  align-items: center;
+  border-bottom: 1px solid hsl(0, 0%, 90%);
 }
-.tabla > div {
-    display: grid;
-    padding: 5px 10px;
-    min-height: 40px;
-    color: hsl(0, 0%, 10%);
-    align-items: center;
-    border-bottom: 1px solid hsl(0, 0%, 90%);
+
+.tabla>div {
+  display: grid;
+  padding: 5px 10px;
+  min-height: 40px;
+  color: hsl(0, 0%, 10%);
+  align-items: center;
+  border-bottom: 1px solid hsl(0, 0%, 90%);
 }
-.tabla > div:hover {
-    background-color: hsl(0, 0%, 95%);
+
+.tabla>div:hover {
+  background-color: hsl(0, 0%, 95%);
 }
-.tabla > div:last-child {
-    border-bottom: none;
+
+.tabla>div:last-child {
+  border-bottom: none;
 }
+
 .tabla .boton-tabla {
-    display: flex;
-    justify-content: center;
-    padding: 0px 5px;
+  display: flex;
+  justify-content: center;
+  padding: 0px 5px;
 }
+
 .tabla .button {
-    height: 100%;
-    width: 100%;
-    padding: 0px 10px;
-    font-size: 20px;
+  height: 100%;
+  width: 100%;
+  padding: 0px 10px;
+  font-size: 20px;
 }
+
 .seccion-productos {
-    border-top: 1px solid hsl(0, 0%, 80%);
-    position: relative;
-    display: grid;
-    grid-template-columns: 7fr 5fr;
-    position: relative;
-    height: 93dvh;
+  border-top: 1px solid hsl(0, 0%, 80%);
+  position: relative;
+  display: grid;
+  grid-template-columns: 7fr 5fr;
+  position: relative;
+  height: 93dvh;
 }
+
 .panel-izquierdo {
-    overflow: auto;
-    padding: 20px 32px 20px 32px;
-    display: flex;
-    flex-flow: column nowrap;
-    padding-bottom: 20px;
+  overflow: auto;
+  padding: 20px 32px 20px 32px;
+  display: flex;
+  flex-flow: column nowrap;
+  padding-bottom: 20px;
 }
-.tabla > .nav-productos {
-    grid-template-columns: 12fr 2fr 2fr 1fr;
+
+.tabla>.nav-productos {
+  grid-template-columns: 12fr 2fr 2fr 1fr;
 }
-.tabla > .detalles-producto {
-    grid-template-columns: 12fr 2fr 2fr 1fr;
+
+.tabla>.detalles-producto {
+  grid-template-columns: 12fr 2fr 2fr 1fr;
 }
+
 .panel-derecho {
-    overflow: auto;
-    padding: 20px 32px 20px 32px;
-    border-left: 1px solid hsl(0, 0%, 80%);
-    height: 90dvh;
+  overflow: auto;
+  padding: 20px 32px 20px 32px;
+  border-left: 1px solid hsl(0, 0%, 80%);
+  height: 90dvh;
 }
-.tabla > .nav-venta {
-    grid-template-columns: 2fr 1fr;
-    padding: 5px 10px;
-    height: 50px;
+
+.tabla>.nav-venta {
+  grid-template-columns: 2fr 1fr;
+  padding: 5px 10px;
+  height: 50px;
 }
-.tabla > .nav-prod-sel {
-    grid-template-columns: 8fr 1fr 1fr;
+
+.tabla>.nav-prod-sel {
+  grid-template-columns: 8fr 1fr 1fr;
 }
-.tabla > .prod-sel {
-    grid-template-columns: 8fr 1fr 1fr;
+
+.tabla>.prod-sel {
+  grid-template-columns: 8fr 1fr 1fr;
 }

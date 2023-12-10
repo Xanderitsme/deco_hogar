@@ -1,10 +1,13 @@
 <?php
+
 namespace app\models;
 
-class viewsModel {
+class viewsModel
+{
 
-    protected function obtenerVistasModelo($vista) {
-        
+    protected function obtenerVistasModelo($vista)
+    {
+
         $listaBlanca = [
             "dashboard",
             "logout",

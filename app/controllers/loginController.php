@@ -1,11 +1,15 @@
 <?php
+
 namespace app\controllers;
+
 use app\models\mainModel;
 use PDO;
 
-class loginController extends mainModel {
-    
-    public function iniciarSesionControlador() {
+class loginController extends mainModel
+{
+
+    public function iniciarSesionControlador()
+    {
 
         $usuario = $this->limpiarCadena($_POST['login_usuario']);
         $clave = $this->limpiarCadena($_POST['login_clave']);
@@ -14,24 +18,24 @@ class loginController extends mainModel {
             echo $this->errorLogin("No has llenado todos los campos");
             return;
         }
-        
+
         if ($this->verificarDatos("[a-zA-Z0-9]{1,20}", $usuario)) {
             echo $this->errorLogin("El usuario no coincide con el formato solicitado");
             return;
         }
-        
+
         if ($this->verificarDatos("[a-zA-Z0-9$@._\-]{1,20}", $clave)) {
             echo $this->errorLogin("La clave no coincide con el formato solicitado");
             return;
         }
-        
+
         $checkUsuario = $this->ejecutarConsulta("select * from cuentas where usuario = '$usuario'");
 
         if (is_null($checkUsuario)) {
             echo $this->errorLogin("Ha ocurrido un error al intentar verificar los datos de inicio de sesión");
             return;
         }
-        
+
         if ($checkUsuario->rowCount() == 0) {
             echo $this->errorLogin("El usuario $usuario no está registrado");
             return;
@@ -60,7 +64,7 @@ class loginController extends mainModel {
                 echo $this->errorLogin("Ha ocurrido un error al intentar cargar los datos del trabajador, intentelo de nuevo");
                 return;
             }
-            
+
             $datosTrabajador = $datosTrabajador->fetch(PDO::FETCH_ASSOC);
 
             $_SESSION['nombres'] = $datosTrabajador['nombres'];
@@ -70,7 +74,7 @@ class loginController extends mainModel {
             if (headers_sent()) {
                 echo "
                 <script>
-                    window.location.href = '" . APP_URL ."dashboard/';
+                    window.location.href = '" . APP_URL . "dashboard/';
                 </script>
                 ";
             } else {
@@ -82,14 +86,15 @@ class loginController extends mainModel {
         }
     }
 
-    public function cerrarSesionControlador() {
+    public function cerrarSesionControlador()
+    {
 
         session_destroy();
 
         if (headers_sent()) {
             echo "
             <script>
-            window.location.href = '" . APP_URL ."login/';
+            window.location.href = '" . APP_URL . "login/';
             </script>
             ";
         } else {
@@ -97,7 +102,8 @@ class loginController extends mainModel {
         }
     }
 
-    private function errorLogin($mensajeAlerta) {
+    private function errorLogin($mensajeAlerta)
+    {
         return "
             <script>
                 Swal.fire({

@@ -8,10 +8,11 @@
 	<div class="form-rest mb-6 mt-6"></div>
 
 	<?php
-		use app\controllers\usuarioController;
 
-		$insUsuario = new usuarioController();
+	use app\controllers\usuarioController;
 
-		echo $insUsuario->listarTrabajadoresControlador($url[1], 10, $url[0], "");
+	$insUsuario = new usuarioController();
+
+	echo $insUsuario->listarTrabajadoresControlador($url[1], 10, $url[0], "");
 	?>
 </div>
