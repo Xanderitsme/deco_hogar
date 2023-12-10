@@ -59,7 +59,7 @@
                 </div>
             </div>
             <div class="navbar-item has-dropdown is-hoverable">
-                <a class="navbar-link" href="#">
+                <a class="navbar-link" href="<?php echo APP_URL; ?>listaTrabajadores/">
                     Trabajadores
                 </a>
                 <div class="navbar-dropdown is-boxed">
