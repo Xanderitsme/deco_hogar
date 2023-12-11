@@ -20,11 +20,8 @@
           Productos
         </a>
         <div class="navbar-dropdown is-boxed">
-          <a class="navbar-item" href="#">
-            Nuevo producto
-          </a>
-          <a class="navbar-item" href="#">
-            Nuevo producto
+          <a class="navbar-item" href="<?php echo APP_URL; ?>nuevoProducto/">
+            Registrar nuevo producto
           </a>
         </div>
       </div>

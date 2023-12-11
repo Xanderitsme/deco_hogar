@@ -390,7 +390,7 @@ class usuarioController extends mainModel
       return json_encode($alerta);
       exit();
     }
-      
+
     $datos = $datos->fetch(PDO::FETCH_ASSOC);
 
     $eliminarUsuario = $this->eliminarRegistro("cuentas", "ID", $id);
@@ -407,9 +407,9 @@ class usuarioController extends mainModel
         unlink("../views/fotos/" . $datos['foto']);
       }
 
-      $alerta = $this->crearAlertaRecargar("Usuario eliminado", "El usuario " . $datos['usuario'] . " (" . $datos['nombres'] . " " . $datos['apellidos'] .") se eliminó con éxito");
+      $alerta = $this->crearAlertaRecargar("Usuario eliminado", "El usuario " . $datos['usuario'] . " (" . $datos['nombres'] . " " . $datos['apellidos'] . ") se eliminó con éxito");
     } else {
-      $alerta = $this->crearAlertaError("No se pudo eliminar el usuario "  . $datos['usuario'] . " (" . $datos['nombres'] . " " . $datos['apellidos'] ."), por favor intente nuevamente");
+      $alerta = $this->crearAlertaError("No se pudo eliminar el usuario "  . $datos['usuario'] . " (" . $datos['nombres'] . " " . $datos['apellidos'] . "), por favor intente nuevamente");
     }
 
     return json_encode($alerta);
@@ -832,7 +832,7 @@ class usuarioController extends mainModel
       exit();
     }
 
-    if ($eliminarTrabajador->rowCount() == 1) {  
+    if ($eliminarTrabajador->rowCount() == 1) {
       if ($datosCuenta->rowCount() > 0) {
         $datosCuenta = $datosCuenta->fetch(PDO::FETCH_ASSOC);
         if (is_file("../views/fotos/" . $datosCuenta['foto'])) {
@@ -852,6 +852,79 @@ class usuarioController extends mainModel
   private function errorRegistroTrabajador()
   {
     $alerta = $this->crearAlertaError("Ha ocurrido un error al intentar registrar los datos del trabajador");
+    return json_encode($alerta);
+  }
+
+  public function registrarProductoControlador()
+  {
+    $nombre = $this->limpiarCadena($_POST["producto_nombre"]);
+    $stock = $this->limpiarCadena($_POST["producto_stock"]);
+    $precioVenta = $this->limpiarCadena($_POST["producto_precio_venta"]);
+    $precioCompra = $this->limpiarCadena($_POST["producto_precio_compra"]);
+    $descripcion = $this->limpiarCadena($_POST["producto_descripcion"]);
+
+    if (empty($nombre) || empty($descripcion) || empty($precioVenta) || empty($precioCompra) || empty($stock)) {
+      $alerta = $this->crearAlertaError("No has llenado todos los campos que son obligatorios");
+      return json_encode($alerta);
+      exit();
+    }
+
+    if ($this->verificarDatos("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]{1,100}", $nombre)) {
+      $alerta = $this->crearAlertaError("El nombre no coincide con el formato solicitado: ");
+      return json_encode($alerta);
+      exit();
+    }
+
+    if ($this->verificarDatos("[0-9]", $stock)) {
+      $alerta = $this->crearAlertaError("El stock no coincide con el formato solicitado: ");
+      return json_encode($alerta);
+      exit();
+    }
+
+    if ($this->verificarDatos("[0-9]{1,5}\.[0-9]{2}", $precioVenta)) {
+      $alerta = $this->crearAlertaError("El precio de venta no coincide con el formato solicitado: ");
+      return json_encode($alerta);
+      exit();
+    }
+
+    if ($this->verificarDatos("[0-9]{1,5}\.[0-9]{2}", $precioCompra)) {
+      $alerta = $this->crearAlertaError("El precio de compra no coincide con el formato solicitado: ");
+      return json_encode($alerta);
+      exit();
+    }
+
+    if ($this->verificarDatos("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]{8,250}", $descripcion)) {
+      $alerta = $this->crearAlertaError("La descripción no coincide con el formato solicitado: ");
+      return json_encode($alerta);
+      exit();
+    }
+
+    $check_nombre = $this->ejecutarConsulta("SELECT nombre from productos where nombre = '$nombre'");
+
+    if (is_null($check_nombre)) {
+      return $this->errorRegistroProducto();
+      exit();
+    }
+
+    if ($check_nombre->rowCount() > 0) {
+      $alerta = $this->crearAlertaError("El nombre del producto que acaba de ingresar ya se encuentra registrado");
+      return json_encode($alerta);
+      exit();
+    }
+
+    $producto_datos_reg = [
+      [
+        "campo_nombre" => "",
+        "campo_marcador" => "",
+        "campo_valor" => ""
+      ]
+    ];
+
+  }
+
+  private function errorRegistroProducto()
+  {
+    $alerta = $this->crearAlertaError("Ha ocurrido un error al intentar registrar los datos del producto");
     return json_encode($alerta);
   }
 }

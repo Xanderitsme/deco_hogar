@@ -55,7 +55,8 @@ create table if not exists productos (
     ID int auto_increment,
     nombre varchar (100) not null unique,
     descripcion varchar (250) not null,
-    precio float not null,
+    precio_venta float not null,
+    precio_compra float not null,
     stock int default 0 not null,
     primary key (ID)
 );
