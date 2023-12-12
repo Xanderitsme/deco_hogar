@@ -1,3 +1,9 @@
+<style>
+  body,
+  html {
+    overflow: hidden;
+  }
+</style>
 <div class="seccion-productos">
 	<div class="panel-izquierdo">
 		<h2 class="subtitle">Productos disponibles</h2>
