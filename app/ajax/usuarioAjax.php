@@ -26,6 +26,12 @@ if (isset($_POST["modulo_usuario"])) {
   if ($_POST["modulo_trabajador"] == "eliminar") {
     echo $insUsuario->eliminarTrabajadorControlador();
   }
+} elseif (isset($_POST["modulo_producto"])) {
+  $insUsuario = new usuarioController();
+
+  if ($_POST["modulo_producto"] == "registrar") {
+    echo $insUsuario->registrarProductoControlador();
+  }
 } else {
   session_destroy();
   header("Location: " . APP_URL . "login/");
