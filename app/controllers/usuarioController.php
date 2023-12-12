@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\mainModel;
+use app\models\productModel;
 use DateTime;
 use PDO;
 
@@ -875,7 +876,7 @@ class usuarioController extends mainModel
       exit();
     }
 
-    if ($this->verificarDatos("[0-9]", $stock)) {
+    if ($this->verificarDatos("[0-9]{1,5}", $stock)) {
       $alerta = $this->crearAlertaError("El stock no coincide con el formato solicitado: ");
       return json_encode($alerta);
       exit();
@@ -893,7 +894,7 @@ class usuarioController extends mainModel
       exit();
     }
 
-    if ($this->verificarDatos("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]{8,250}", $descripcion)) {
+    if ($this->verificarDatos("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]{5,250}", $descripcion)) {
       $alerta = $this->crearAlertaError("La descripción no coincide con el formato solicitado: ");
       return json_encode($alerta);
       exit();
@@ -912,14 +913,11 @@ class usuarioController extends mainModel
       exit();
     }
 
-    $producto_datos_reg = [
-      [
-        "campo_nombre" => "",
-        "campo_marcador" => "",
-        "campo_valor" => ""
-      ]
-    ];
+    $insProducto = new productModel();
 
+    $alerta = $insProducto->registrarProducto($nombre, $descripcion, $precioVenta, $precioCompra, $stock);
+
+    return json_encode($alerta);
   }
 
   private function errorRegistroProducto()
