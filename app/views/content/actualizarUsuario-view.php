@@ -101,7 +101,6 @@
 			<button type="submit" class="button is-success is-rounded">Actualizar</button>
 		</p>
 	</form>
-	
 
 	<article class="message is-danger">
 		 <div class="message-header">
@@ -109,9 +108,3 @@
 		 </div>
 	    <div class="message-body">No se pudo cargar los datos solicitados</div>
 	</article>
-<style>
-  body,
-  html {
-    overflow: auto;
-  }
-</style>
