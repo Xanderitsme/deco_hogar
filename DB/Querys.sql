@@ -6,3 +6,4 @@ use deco_hogar;
 -- );
 
 -- select bin_to_uuid from elementos_uuid;
+
