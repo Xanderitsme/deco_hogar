@@ -1,42 +1,30 @@
+<?php
+
+use app\controllers\usuarioController;
+
+$insUsuario = new usuarioController();
+?>
 <style>
-  body,
-  html {
-    overflow: hidden;
-  }
+	body,
+	html {
+		overflow: hidden;
+	}
 </style>
 <div class="seccion-productos">
 	<div class="panel-izquierdo">
 		<h2 class="subtitle">Productos disponibles</h2>
-
+		<form action="<?php echo APP_URL; ?>app/ajax/usuarioAjax.php" method="post">
+			<input class="borde sombra buscador" type="text" placeholder="Buscar productos...">
+			<input type="hidden" name="buscador_productos" value="buscar_producto">
+		</form>
 		<?php
-
-		use app\controllers\usuarioController;
-
-		$insUsuario = new usuarioController();
-
-		echo $insUsuario->listarProductosVentaControlador($url[1], 10, $url[0], "");
+		echo $insUsuario->listarProductosVentaControlador("");
 		?>
+	</div>
 	<div class="panel-derecho">
 		<h2 class="subtitle">Productos a vender</h2>
-		<div class="tabla borde sombra">
-			<nav class="nav-venta">
-				<span>Subtotal: S/. 1599.98</span>
-				<span class="boton-tabla"><button class="borde sombra button is-dark">Generar proforma</button></span>
-			</nav>
-		</div>
-		<div class="tabla borde sombra">
-			<nav class="nav-prod-sel">
-				<span>Nombre</span>
-				<span>Editar</span>
-				<span>Eliminar</span>
-			</nav>
-			<?php for ($i = 0; $i < 2; $i++) { ?>
-				<div class="prod-sel">
-					<span>Refrigeradora Razer gamer RGB full fps</span>
-					<span class="boton-tabla"><button class="borde sombra button is-dark">+</button></span>
-					<span class="boton-tabla"><button class="borde sombra button is-dark">+</button></span>
-				</div>
-			<?php } ?>
-		</div>
+		<?php
+		echo $insUsuario->listarProductosProformaControlador(1);
+		?>
 	</div>
 </div>
