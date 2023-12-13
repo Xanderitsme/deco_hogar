@@ -920,6 +920,95 @@ class usuarioController extends mainModel
     return json_encode($alerta);
   }
 
+  public function listarProductosVentaControlador($pagina, $registros, $url, $busqueda)
+  {
+    $pagina = $this->limpiarCadena($pagina);
+    $registros = $this->limpiarCadena($registros);
+    $url = $this->limpiarCadena($url);
+    $url = APP_URL . $url . "/";
+    $busqueda = $this->limpiarCadena($busqueda);
+
+    $tabla = "";
+
+    $pagina = (isset($pagina) && $pagina > 0) ? (int) $pagina : 1;
+    $inicio = ($pagina > 0) ? (($pagina * $registros) - $registros) : 0;
+
+    $insProducto = new productModel();
+
+    $datos = $insProducto->obtenerListaProductosVenta($inicio, $registros, $busqueda);
+
+    if (is_null($datos)) {
+      echo $this->mostrarError("Ha ocurrido un error al intentar cargar los datos de los productos");
+      return;
+    }
+
+    $total = $insProducto->obtenerTotalProductos($busqueda);
+
+    if (is_null($total)) {
+      echo $this->mostrarError("Ha ocurrido un error al intentar cargar el total de productos");
+      return;
+    }
+
+    $numeroPaginas = ceil($total / $registros);
+
+    $tabla .= '
+      <form action="<?php echo APP_URL; ?>app/ajax/usuarioAjax.php" method="post">
+        <input class="borde sombra buscador" type="text" placeholder="Buscar productos...">
+        <input type="hidden" name="buscador_productos" value="buscar_producto">
+      </form>
+      <div class="tabla borde sombra">
+        <nav class="nav-productos">
+          <span>Nombre</span>
+          <span>Estado</span>
+          <span>Precio</span>
+          <span>Agregar</span>
+        </nav>
+    ';
+
+    if ($total >= 1) {
+      foreach ($datos as $rows) {
+        $tabla .= '
+          <div class="detalles-producto">
+            <span>' . $rows['nombre'] . '</span>
+            <span>' . (($rows['stock'] > 0) ? 'Disponible' : 'No disponible') . '</span>
+            <span>' . APP_MONEY_SYMBOL . $rows['precio_venta'] . '</span>
+
+            <form class="FormularioAjax" action="' . APP_URL . 'app/ajax/usuarioAjax.php" method="POST" autocomplete="off" >
+              <input type="hidden" name="modulo_producto" value="agregar">
+              <input type="hidden" name="producto_id" value="' . $rows['ID'] . '">
+              <span class="boton-tabla">
+                <button type="submit" class="button is-success is-rounded is-small">Agregar</button>
+              </span>
+            </form>
+          </div>';
+      }
+
+    } else {
+        $tabla .= '
+          <div class="detalles-producto">
+            <span>No hay registros en el sistema</span>
+          </div>';
+    }
+
+    $tabla .= '
+      </div>
+    </div>';
+
+    // if ($total >= 1 && $pagina <= $numeroPaginas) {
+    //   $tabla .= '
+    //         <p class="has-text-right">
+    //             Mostrando usuarios <strong>' . $pag_inicio . '</strong> al <strong>' . $pag_final . '</strong> 
+    //             de un <strong>total de ' . $total . '</strong>
+    //         </p>
+    //         ';
+
+    //   $tabla .= $this->paginadorTablas($pagina, $numeroPaginas, $url, 10);
+    // }
+
+    return $tabla;
+
+  }
+
   private function errorRegistroProducto()
   {
     $alerta = $this->crearAlertaError("Ha ocurrido un error al intentar registrar los datos del producto");
