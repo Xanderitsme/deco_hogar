@@ -151,15 +151,16 @@ html {
 }
 
 .tabla>.nav-venta {
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 3fr 1fr;
   padding: 5px 10px;
   height: 50px;
 }
 
 .tabla>.nav-prod-sel {
-  grid-template-columns: 8fr 1fr 1fr;
+  grid-template-columns: 10fr 2fr;
 }
 
 .tabla>.prod-sel {
   grid-template-columns: 8fr 1fr 1fr;
+  column-gap: 10px;
 }
