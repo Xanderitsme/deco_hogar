@@ -46,3 +46,20 @@ update cuentas set foto = 'admin_68.jpg' where cuentas.`ID` = 1;
 -- https://importacionesrubi.com.pe/
 -- insert into proveedores (denominacion_social, `RUC`, tiempo_envio, ubicacion) values
 -- ("IMPORTACIONES RUBI S.A.", "20298463165", 15, "Cercado de Lima");
+
+insert into clientes (tipo, numero_contacto, nombres, apellidos, `DNI`) values
+(1, '981395227', 'Cliente', 'de prueba', '44966576');
+
+insert into proformas_venta (total, `clienteID`, `vendedorID`, estado) values
+(0, 1, 1, 1);
+
+insert into detalles (cantidad, subtotal, unidad, `productoID`, `proforma_ventaID`) values
+(10, 0, 1, 1, 1),
+(10, 0, 1, 2, 1),
+(10, 0, 1, 3, 1),
+(10, 0, 1, 4, 1);
+
+update detalles set detalles.subtotal = (
+  (select productos.precio_venta from productos
+  where productos.ID = detalles.`productoID`) * detalles.cantidad
+);
