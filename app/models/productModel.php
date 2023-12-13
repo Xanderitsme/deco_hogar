@@ -8,53 +8,35 @@ class productModel extends mainModel
 {
   private const NOMBRE_TABLA = "productos";
   private const CAMPOS_TABLA = [
-    "nombre", 
-    "descripcion", 
-    "precio_venta", 
-    "precio_compra", 
+    "nombre",
+    "descripcion",
+    "precio_venta",
+    "precio_compra",
     "stock"
   ];
 
   public function registrarProducto($nombre, $descripcion, $precioVenta, $precioCompra, $stock)
   {
-    $datosProducto = [
-      [
-        "campo_nombre" => self::CAMPOS_TABLA[0],
-        "campo_marcador" => ":" . self::CAMPOS_TABLA[0],
-        "campo_valor" => $nombre
-      ],
-      [
-        "campo_nombre" => self::CAMPOS_TABLA[1],
-        "campo_marcador" => ":" . self::CAMPOS_TABLA[1],
-        "campo_valor" => $descripcion
-      ],
-      [
-        "campo_nombre" => self::CAMPOS_TABLA[2],
-        "campo_marcador" => ":" . self::CAMPOS_TABLA[2],
-        "campo_valor" => $precioVenta
-      ],
-      [
-        "campo_nombre" => self::CAMPOS_TABLA[3],
-        "campo_marcador" => ":" . self::CAMPOS_TABLA[3],
-        "campo_valor" => $precioCompra
-      ],
-      [
-        "campo_nombre" => self::CAMPOS_TABLA[4],
-        "campo_marcador" => ":" . self::CAMPOS_TABLA[4],
-        "campo_valor" => $stock
-      ]
-    ];
+    $datos = [$nombre, $descripcion, $precioVenta, $precioCompra, $stock];
+
+    $datosProducto = $this->empaquetarDatos(self::CAMPOS_TABLA, $datos);
+
+    if (is_null($datosProducto)) {
+      $alerta = $this->crearAlertaError("Ocurrió un error al procesar los datos del producto, por favor intente más tarde");
+      return $alerta;
+    }
 
     $registrar = $this->guardarDatos(self::NOMBRE_TABLA, $datosProducto);
 
-    if (!is_null($registrar)) {
-      if ($registrar->rowCount() == 1) {
-        $alerta = $this->crearAlertaLimpiarSuccess("Producto registrado", "El producto " . $nombre . " ha sido registrado exitosamente");
-      } else {
-        $alerta = $this->crearAlertaError("No se pudo registrar el producto, por favor intente nuevamente");
-      }
-    } else {
+    if (is_null($registrar)) {
       $alerta = $this->crearAlertaError("No se pudo registrar el producto, por favor intente más tarde");
+      return $alerta;
+    }
+
+    if ($registrar->rowCount() == 1) {
+      $alerta = $this->crearAlertaLimpiarSuccess("Producto registrado", "El producto " . $nombre . " ha sido registrado exitosamente");
+    } else {
+      $alerta = $this->crearAlertaError("No se pudo registrar el producto, por favor intente nuevamente");
     }
 
     return $alerta;
@@ -70,5 +52,61 @@ class productModel extends mainModel
 
   public function eliminarProducto()
   {
+  }
+
+  public function obtenerListaProductosVenta($busqueda)
+  {
+    if (isset($busqueda) && !empty($busqueda)) {
+      $consulta_datos = "
+        select
+          ID, 
+          nombre, 
+          precio_venta, 
+          stock
+        from productos 
+        where 
+          nombre like '%" . $busqueda . "%',
+          or descripcion like '%" . $busqueda . "%'
+        order by nombre asc";
+    } else {
+      $consulta_datos = "
+        select
+          ID, 
+          nombre, 
+          precio_venta, 
+          stock
+        from productos 
+        order by nombre asc";
+    }
+
+    $datos = $this->ejecutarConsulta($consulta_datos);
+
+    if (is_null($datos)) {
+      return null;
+    }
+
+    return $datos->fetchAll();
+  }
+
+  public function obtenerTotalProductos($busqueda)
+  {
+    if (isset($busqueda) && !empty($busqueda)) {
+      $consulta_total = "
+        select count(*) as total from productos
+        where 
+          nombre like '%" . $busqueda . "%',
+          or descripcion like '%" . $busqueda . "%'
+      ";
+    } else {
+      $consulta_total = "select count(*) as total from productos";
+    }
+
+    $total = $this->ejecutarConsulta($consulta_total);
+
+    if (is_null($total)) {
+      return null;
+    }
+
+    return $total->fetchColumn();
   }
 }
