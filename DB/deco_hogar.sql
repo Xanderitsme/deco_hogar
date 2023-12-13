@@ -68,7 +68,7 @@ create table if not exists proformas_venta (
     fecha timestamp not null default current_timestamp,
     clienteID int not null,
     vendedorID int not null,
-    estado enum('pendiente', 'pagado') not null,
+    estado enum('pendiente', 'pagado', 'cancelado') not null,
     foreign key (clienteID) references clientes (ID) on delete cascade,
     foreign key (vendedorID) references trabajadores (ID) on delete cascade,
     primary key (ID)
