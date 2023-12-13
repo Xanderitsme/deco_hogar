@@ -4,12 +4,12 @@ namespace app\controllers;
 
 use app\models\mainModel;
 use app\models\productModel;
+use app\models\proformaVentaModel;
 use DateTime;
 use PDO;
 
 class usuarioController extends mainModel
 {
-
   public function registrarUsuarioControlador()
   {
 
@@ -63,20 +63,18 @@ class usuarioController extends mainModel
       exit();
     }
 
-    // Verificar si el trabajador ya tiene una cuenta registrada (opcional)
+    $check_cuenta_registrada = $this->ejecutarConsulta("select trabajadorID from cuentas where trabajadorID = $trabajadorId");
 
-    // $check_cuenta_registrada = $this->ejecutarConsulta("select trabajadorID from cuentas where trabajadorID = $trabajadorId");
+    if (is_null($check_cuenta_registrada)) {
+        return $this->errorRegistroUsuario();
+        exit();
+    }
 
-    // if (is_null($check_cuenta_registrada)) {
-    //     return $this->errorRegistroUsuario();
-    //     exit();
-    // }
-
-    // if ($check_cuenta_registrada->rowCount() > 0) {
-    //     $alerta = $this->crearAlertaError("El trabajador ingresado ya tiene una cuenta registrada");
-    //     return json_encode($alerta);
-    //     exit();
-    // }
+    if ($check_cuenta_registrada->rowCount() > 0) {
+        $alerta = $this->crearAlertaError("El trabajador ingresado ya tiene una cuenta registrada");
+        return json_encode($alerta);
+        exit();
+    }
 
     $check_usuario = $this->ejecutarConsulta("select usuario from cuentas where usuario = '$usuario'");
 
@@ -920,22 +918,15 @@ class usuarioController extends mainModel
     return json_encode($alerta);
   }
 
-  public function listarProductosVentaControlador($pagina, $registros, $url, $busqueda)
+  public function listarProductosVentaControlador($busqueda)
   {
-    $pagina = $this->limpiarCadena($pagina);
-    $registros = $this->limpiarCadena($registros);
-    $url = $this->limpiarCadena($url);
-    $url = APP_URL . $url . "/";
     $busqueda = $this->limpiarCadena($busqueda);
 
     $tabla = "";
 
-    $pagina = (isset($pagina) && $pagina > 0) ? (int) $pagina : 1;
-    $inicio = ($pagina > 0) ? (($pagina * $registros) - $registros) : 0;
-
     $insProducto = new productModel();
 
-    $datos = $insProducto->obtenerListaProductosVenta($inicio, $registros, $busqueda);
+    $datos = $insProducto->obtenerListaProductosVenta($busqueda);
 
     if (is_null($datos)) {
       echo $this->mostrarError("Ha ocurrido un error al intentar cargar los datos de los productos");
@@ -949,13 +940,7 @@ class usuarioController extends mainModel
       return;
     }
 
-    $numeroPaginas = ceil($total / $registros);
-
     $tabla .= '
-      <form action="<?php echo APP_URL; ?>app/ajax/usuarioAjax.php" method="post">
-        <input class="borde sombra buscador" type="text" placeholder="Buscar productos...">
-        <input type="hidden" name="buscador_productos" value="buscar_producto">
-      </form>
       <div class="tabla borde sombra">
         <nav class="nav-productos">
           <span>Nombre</span>
@@ -976,37 +961,80 @@ class usuarioController extends mainModel
             <form class="FormularioAjax" action="' . APP_URL . 'app/ajax/usuarioAjax.php" method="POST" autocomplete="off" >
               <input type="hidden" name="modulo_producto" value="agregar">
               <input type="hidden" name="producto_id" value="' . $rows['ID'] . '">
-              <span class="boton-tabla">
-                <button type="submit" class="button is-success is-rounded is-small">Agregar</button>
-              </span>
+              <button type="submit" class="button is-success is-rounded is-small">Agregar</button>
             </form>
           </div>';
       }
-
     } else {
-        $tabla .= '
+      $tabla .= '
           <div class="detalles-producto">
             <span>No hay registros en el sistema</span>
           </div>';
     }
 
     $tabla .= '
-      </div>
-    </div>';
-
-    // if ($total >= 1 && $pagina <= $numeroPaginas) {
-    //   $tabla .= '
-    //         <p class="has-text-right">
-    //             Mostrando usuarios <strong>' . $pag_inicio . '</strong> al <strong>' . $pag_final . '</strong> 
-    //             de un <strong>total de ' . $total . '</strong>
-    //         </p>
-    //         ';
-
-    //   $tabla .= $this->paginadorTablas($pagina, $numeroPaginas, $url, 10);
-    // }
+      </div>';
 
     return $tabla;
+  }
 
+  public function listarProductosProformaControlador($id)
+  {
+    $id = $this->limpiarCadena($id);
+
+    $insProformaVenta = new proformaVentaModel();
+
+    $datos = $insProformaVenta->obtenerProductosProformaVenta($id);
+
+    if (is_null($datos)) {
+      echo $this->mostrarError("Ha ocurrido un error al intentar cargar los datos de la proforma de venta");
+      return;
+    }
+
+    $totalProforma = 0;
+
+    foreach ($datos as $rows) {
+      $totalProforma += $rows['subtotal'];
+    }
+
+    $total = sizeof($datos);
+
+    $tabla = "";
+
+    $tabla .= '
+      <div class="tabla borde sombra">
+        <nav class="nav-venta">
+          <span>Total: ' . APP_MONEY_SYMBOL . $totalProforma . '</span>
+          <button class="button is-info is-rounded is-normal">Generar proforma</button>
+        </nav>
+      </div>
+      <div class="tabla borde sombra">
+        <nav class="nav-prod-sel">
+          <span>Nombre</span>
+          <span>Opciones</span>
+        </nav>
+    ';
+
+    if ($total >= 1) {
+      foreach ($datos as $rows) {
+        $tabla .= '
+          <div class="prod-sel">
+            <span>' . $rows['nombre'] . '</span>
+            <button class="button is-success is-rounded is-small">Editar</button>
+            <button class="button is-danger is-rounded is-small">Eliminar</button>
+          </div>';
+      }
+    } else {
+      $tabla .= '
+        <div class="prod-sel">
+          <span>No hay registros en el sistema</span>
+        </div>';
+    }
+
+    $tabla .= '
+      </div>';
+
+    return $tabla;
   }
 
   private function errorRegistroProducto()
