@@ -6,4 +6,4 @@ const APP_SESION_NAME = "APP";
 
 date_default_timezone_set("America/Lima");
 
-const APP_MONEY_SYMBOL = "S/.";
+const MONEY_SYMBOL = "S/.";
