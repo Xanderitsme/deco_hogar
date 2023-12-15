@@ -1,4 +1,4 @@
-# Archivos que tienen un propietario específico
 /public_html/* @xanderitsme
 /DB/* @xanderitsme
 /.github/* @xanderitsme
+/CODEOWNERS @xanderitsme
