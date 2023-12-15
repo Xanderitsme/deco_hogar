@@ -1,5 +1,5 @@
 # Aplicación web deco hogar
-En este repositorio estaré desarrollando una aplicación para gestionar los registros en general de un negocio, como las ventas, los trabajadores, los usuarios del sistema, el inventario, entre otras cosas más
+En este repositorio se llevará a cabo el desarrollo de una aplicación para gestionar los registros en general de un negocio, como las ventas, los trabajadores, los usuarios del sistema, el inventario, entre otras cosas más
 
 > [!NOTE]
 > Actualmente esta aplicación se encuentra en desarrollo, pero puedes ver los avances aquí:
