@@ -4,16 +4,20 @@ namespace app\models;
 
 use app\models\mainModel;
 
-class productModel extends mainModel
+interface Producto extends Objeto
 {
-  private const NOMBRE_TABLA = "productos";
-  private const CAMPOS_TABLA = [
+  const NOMBRE_TABLA = "productos";
+  const CAMPOS_TABLA = [
     "nombre",
     "descripcion",
     "precio_venta",
     "precio_compra",
     "stock"
   ];
+}
+
+class productModel extends mainModel implements Producto
+{
 
   public function registrarProducto($nombre, $descripcion, $precioVenta, $precioCompra, $stock)
   {
@@ -42,15 +46,19 @@ class productModel extends mainModel
     return $alerta;
   }
 
-  public function obtenerProducto()
+  public function registrar($datos)
   {
   }
 
-  public function actualizarProducto()
+  public function obtener($id)
   {
   }
 
-  public function eliminarProducto()
+  public function actualizar($id, $datos)
+  {
+  }
+
+  public function eliminar($id)
   {
   }
 
