@@ -105,19 +105,6 @@ html {
   border-bottom: none;
 }
 
-/* .tabla .boton-tabla {
-  display: flex;
-  justify-content: center;
-  padding: 0px 5px;
-}
-
-.tabla .button {
-  height: 100%;
-  width: 100%;
-  padding: 0px 10px;
-  font-size: 20px;
-} */
-
 .seccion-productos {
   border-top: 1px solid hsl(0, 0%, 80%);
   position: relative;
@@ -141,6 +128,10 @@ html {
 
 .tabla>.detalles-producto {
   grid-template-columns: 12fr 2fr 2fr 1fr;
+}
+
+.tabla>.detalles-producto>span:first-child {
+  padding-right: 10px;
 }
 
 .panel-derecho {
