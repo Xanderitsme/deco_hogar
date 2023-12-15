@@ -47,6 +47,38 @@ update cuentas set foto = 'admin_68.jpg' where cuentas.`ID` = 1;
 -- insert into proveedores (denominacion_social, `RUC`, tiempo_envio, ubicacion) values
 -- ("IMPORTACIONES RUBI S.A.", "20298463165", 15, "Cercado de Lima");
 
+INSERT INTO productos (nombre, descripcion, precio_venta, precio_compra, stock) VALUES
+('Refrigerador', 'Refrigerador de acero inoxidable con capacidad de 20 pies cúbicos', 899.99, 600.00, 50),
+('Televisor LED', 'Televisor LED de 55 pulgadas con resolución 4K', 799.00, 500.00, 70),
+('Licuadora de alta potencia', 'Licuadora con 1000W de potencia y jarra de vidrio resistente', 69.99, 45.00, 100),
+('Lavadora automática', 'Lavadora automática de carga frontal con capacidad de 8 kg', 549.00, 400.00, 30),
+('Aspiradora sin bolsa', 'Aspiradora ciclónica sin bolsa con accesorios para esquinas', 129.99, 90.00, 80),
+('Horno eléctrico', 'Horno eléctrico de convección con capacidad de 30 litros', 149.50, 100.00, 60),
+('Batidora de pie', 'Batidora de pie con tazón de acero inoxidable y 6 velocidades', 79.95, 55.00, 90),
+('Cafetera programable', 'Cafetera automática programable con jarra térmica de acero', 89.00, 60.00, 40),
+('Robot de cocina multifunción', 'Robot de cocina con 12 programas automáticos y pantalla táctil', 299.00, 220.00, 25),
+('Plancha de vapor', 'Plancha de vapor con suela antiadherente y sistema antigoteo', 34.50, 20.00, 120),
+('Ventilador de torre', 'Ventilador de torre oscilante con control remoto', 64.99, 45.00, 55),
+('Máquina de hacer pan', 'Máquina automática para hacer pan con 15 programas', 119.00, 80.00, 35),
+('Exprimidor de cítricos', 'Exprimidor eléctrico de cítricos con sistema antigoteo', 29.95, 18.00, 75),
+('Plancha de pelo cerámica', 'Plancha de pelo con placas de cerámica y control de temperatura', 49.50, 35.00, 65),
+('Máquina de coser', 'Máquina de coser portátil con 12 tipos de puntadas', 179.00, 120.00, 20),
+('Freidora de aire', 'Freidora de aire con capacidad de 5.8 litros y pantalla digital', 89.99, 60.00, 85),
+('Microondas con grill', 'Microondas con función grill y capacidad de 25 litros', 129.00, 90.00, 50),
+('Tostadora de pan', 'Tostadora de pan con 7 niveles de tostado y bandeja extraíble', 24.95, 15.00, 110),
+('Manta eléctrica', 'Manta eléctrica con control de temperatura y apagado automático', 39.99, 25.00, 70),
+('Plancha de asar eléctrica', 'Plancha de asar eléctrica con superficie antiadherente', 49.00, 30.00, 45),
+('Secadora de pelo iónica', 'Secadora de pelo iónica con difusor y concentrador', 54.50, 35.00, 80),
+('Balanza digital de cocina', 'Balanza digital de precisión para cocina con pantalla LCD', 19.99, 12.00, 95),
+('Afeitadora eléctrica', 'Afeitadora eléctrica recargable para hombres', 79.00, 50.00, 60),
+('Cortina opaca', 'Cortina opaca de 2 paneles para bloquear la luz y conservar el calor', 29.50, 18.00, 100),
+('Alfombra anti-fatiga', 'Alfombra ergonómica anti-fatiga para cocina o trabajo', 45.99, 30.00, 40),
+('Cepillo eléctrico para dientes', 'Cepillo eléctrico recargable con temporizador y 3 modos de limpieza', 39.95, 25.00, 75),
+('Báscula digital de baño', 'Báscula digital de vidrio templado con pantalla LED', 29.00, 20.00, 65),
+('Dispensador de agua fría/caliente', 'Dispensador de agua con función fría y caliente', 99.00, 70.00, 25),
+('Cortadora de césped eléctrica', 'Cortadora de césped eléctrica con 5 alturas de corte', 169.99, 120.00, 15);
+
+
 insert into clientes (tipo, numero_contacto, nombres, apellidos, `DNI`) values
 (1, '981395227', 'Cliente', 'de prueba', '44966576');
 

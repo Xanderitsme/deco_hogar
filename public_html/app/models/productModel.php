@@ -18,11 +18,8 @@ interface Producto extends Objeto
 
 class productModel extends mainModel implements Producto
 {
-
-  public function registrarProducto($nombre, $descripcion, $precioVenta, $precioCompra, $stock)
+  public function registrar($datos)
   {
-    $datos = [$nombre, $descripcion, $precioVenta, $precioCompra, $stock];
-
     $datosProducto = $this->empaquetarDatos(self::CAMPOS_TABLA, $datos);
 
     if (is_null($datosProducto)) {
@@ -38,16 +35,12 @@ class productModel extends mainModel implements Producto
     }
 
     if ($registrar->rowCount() == 1) {
-      $alerta = $this->crearAlertaLimpiarSuccess("Producto registrado", "El producto " . $nombre . " ha sido registrado exitosamente");
+      $alerta = $this->crearAlertaLimpiarSuccess("Producto registrado", "El producto " . $datos[0] . " ha sido registrado exitosamente");
     } else {
       $alerta = $this->crearAlertaError("No se pudo registrar el producto, por favor intente nuevamente");
     }
 
     return $alerta;
-  }
-
-  public function registrar($datos)
-  {
   }
 
   public function obtener($id)
@@ -69,6 +62,7 @@ class productModel extends mainModel implements Producto
         select
           ID, 
           nombre, 
+          descripcion, 
           precio_venta, 
           stock
         from productos 
@@ -81,6 +75,7 @@ class productModel extends mainModel implements Producto
         select
           ID, 
           nombre, 
+          descripcion, 
           precio_venta, 
           stock
         from productos 

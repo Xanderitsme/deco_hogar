@@ -4,7 +4,7 @@
 </div>
 <div class="container pb-6 pt-6">
 	<h2 class="subtitle">Registrar nuevo producto</h2>
-	<form class="FormularioAjax" action="<?php echo APP_URL; ?>app/ajax/usuarioAjax.php" method="POST" autocomplete="off" enctype="multipart/form-data">
+	<form class="FormularioAjax" action="<?php echo APP_URL; ?>app/ajax/productoAjax.php" method="POST" autocomplete="off" enctype="multipart/form-data">
 		<input type="hidden" name="modulo_producto" value="registrar">
 		<div class="columns">
 			<div class="column">

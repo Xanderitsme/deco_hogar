@@ -9,10 +9,10 @@
 
 	<?php
 
-	use app\controllers\usuarioController;
+	use app\controllers\trabajadorController;
 
-	$insUsuario = new usuarioController();
+	$insTrabajador = new trabajadorController();
 
-	echo $insUsuario->listarTrabajadoresControlador($url[1], 10, $url[0], "");
+	echo $insTrabajador->listarTrabajadoresControlador($url[1], 10, $url[0], "");
 	?>
 </div>
