@@ -3,11 +3,11 @@ require_once "../../config/app.php";
 require_once "../views/inc/session_start.php";
 require_once "../../autoload.php";
 
-use app\controllers\usuarioController;
+use app\controllers\userController;
 
 if (isset($_POST["modulo_usuario"])) {
 
-  $insUsuario = new usuarioController();
+  $insUsuario = new userController();
 
   if ($_POST["modulo_usuario"] == "registrar") {
     echo $insUsuario->registrarUsuarioControlador();
@@ -15,22 +15,6 @@ if (isset($_POST["modulo_usuario"])) {
 
   if ($_POST["modulo_usuario"] == "eliminar") {
     echo $insUsuario->eliminarUsuarioControlador();
-  }
-} elseif (isset($_POST["modulo_trabajador"])) {
-  $insUsuario = new usuarioController();
-
-  if ($_POST["modulo_trabajador"] == "registrar") {
-    echo $insUsuario->registrarTrabajadorControlador();
-  }
-
-  if ($_POST["modulo_trabajador"] == "eliminar") {
-    echo $insUsuario->eliminarTrabajadorControlador();
-  }
-} elseif (isset($_POST["modulo_producto"])) {
-  $insUsuario = new usuarioController();
-
-  if ($_POST["modulo_producto"] == "registrar") {
-    echo $insUsuario->registrarProductoControlador();
   }
 } else {
   session_destroy();
