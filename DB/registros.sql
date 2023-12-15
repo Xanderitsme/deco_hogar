@@ -78,7 +78,6 @@ INSERT INTO productos (nombre, descripcion, precio_venta, precio_compra, stock) 
 ('Dispensador de agua fría/caliente', 'Dispensador de agua con función fría y caliente', 99.00, 70.00, 25),
 ('Cortadora de césped eléctrica', 'Cortadora de césped eléctrica con 5 alturas de corte', 169.99, 120.00, 15);
 
-
 insert into clientes (tipo, numero_contacto, nombres, apellidos, `DNI`) values
 (1, '981395227', 'Cliente', 'de prueba', '44966576');
 
