@@ -9,9 +9,9 @@
 
 	<?php
 
-	use app\controllers\usuarioController;
+	use app\controllers\userController;
 
-	$insUsuario = new usuarioController();
+	$insUsuario = new userController();
 
 	echo $insUsuario->listarUsuariosControlador($url[1], 10, $url[0], "");
 	?>
