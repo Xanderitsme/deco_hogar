@@ -9,6 +9,13 @@ if (file_exists(__DIR__ . "/../../config/server.php")) {
   require_once __DIR__ . "/../../config/server.php";
 }
 
+interface Objeto {
+  function registrar($datos);
+  function obtener($id);
+  function actualizar($id, $datos);
+  function eliminar($id);
+}
+
 class mainModel
 {
 
