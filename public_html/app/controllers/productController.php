@@ -117,7 +117,7 @@ class productController extends mainModel
             <span>' . (($rows['stock'] > 0) ? 'Disponible' : 'No disponible') . '</span>
             <span>' . MONEY_SYMBOL . $rows['precio_venta'] . '</span>
 
-            <form class="FormularioAjax" action="' . APP_URL . 'app/ajax/usuarioAjax.php" method="POST" autocomplete="off" >
+            <form class="FormularioAjax" action="' . APP_URL . 'app/ajax/productoAjax.php" method="POST" autocomplete="off" >
               <input type="hidden" name="modulo_producto" value="agregar">
               <input type="hidden" name="producto_id" value="' . $rows['ID'] . '">
               <button type="submit" class="button is-success is-rounded is-small">Agregar</button>
@@ -169,7 +169,7 @@ class productController extends mainModel
       </div>
       <div class="tabla borde sombra">
         <nav class="nav-prod-sel">
-          <span>Nombre</span>
+          <span>Producto</span>
           <span>Opciones</span>
         </nav>
     ';
@@ -186,7 +186,7 @@ class productController extends mainModel
     } else {
       $tabla .= '
         <div class="prod-sel">
-          <span>No hay registros en el sistema</span>
+          <span>No hay ningún producto seleccionado</span>
         </div>';
     }
 
