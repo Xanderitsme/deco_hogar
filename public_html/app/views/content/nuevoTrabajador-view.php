@@ -71,12 +71,15 @@
 				<div class="control">
 					<label>
 						Cargo *
-						<select class="input" name="trabajador_cargo" pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑ ]{3,40}" maxlength="40" required>
-							<option value="Vendedor">Vendedor</option>
-							<option value="Cargador">Cargador</option>
-							<option value="Cajero">Cajero</option>
-							<option value="Almacenero">Almacenero</option>
-							<option value="Administrador">Administrador</option>
+						<select class="input" name="trabajador_cargo" pattern="[1-9]{1,3}" maxlength="3" required>
+							<?php
+
+							use app\controllers\trabajadorController;
+
+							$insUsuario = new trabajadorController();
+
+							echo $insUsuario->obtenerCargos();
+							?>
 						</select>
 					</label>
 				</div>
