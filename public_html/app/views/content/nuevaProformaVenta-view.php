@@ -22,7 +22,7 @@ $insProducto = new productController();
 		?>
 	</div>
 	<div class="panel-derecho">
-		<h2 class="subtitle">Productos a vender</h2>
+		<h2 class="subtitle">Proforma de venta</h2>
 		<?php
 		echo $insProducto->listarProductosProformaControlador(1);
 		?>

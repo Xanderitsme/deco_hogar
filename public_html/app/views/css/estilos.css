@@ -98,7 +98,7 @@ html {
 }
 
 .tabla>div:hover {
-  background-color: hsl(0, 0%, 95%);
+  background-color: hsl(0, 0%, 97%);
 }
 
 .tabla>div:last-child {
@@ -154,4 +154,14 @@ html {
 .tabla>.prod-sel {
   grid-template-columns: 8fr 1fr 1fr;
   column-gap: 10px;
+}
+
+.table.is-hoverable.is-striped tbody tr:not(.is-selected):hover {
+  background-color: #f0f0f0;
+  color: black;
+}
+
+.table.is-hoverable.is-striped tbody tr:not(.is-selected):hover:nth-child(2n) {
+  background-color: #f0f0f0;
+  color: black;
 }
