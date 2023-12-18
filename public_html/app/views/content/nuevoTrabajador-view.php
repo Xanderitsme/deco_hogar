@@ -78,8 +78,13 @@
 
 							$insUsuario = new trabajadorController();
 
-							echo $insUsuario->obtenerCargos();
+							if ($_SESSION['id'] == 1) {
+								echo $insUsuario->obtenerCargos(0);
+							} else {
+								echo $insUsuario->obtenerCargosNoAdmin(0);
+							}
 							?>
+							<option value="0" selected>Seleccione un cargo</option>
 						</select>
 					</label>
 				</div>
