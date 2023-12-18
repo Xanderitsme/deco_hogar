@@ -14,3 +14,17 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
 });
+
+function mostrarImagenPreview(event) {
+  const input = event.target;
+  const reader = new FileReader();
+
+  reader.onload = function () {
+    const imagenPrev = document.getElementById('imagen-usuario');
+    imagenPrev.src = reader.result;
+  };
+
+  if (input.files && input.files[0]) {
+    reader.readAsDataURL(input.files[0]);
+  }
+}

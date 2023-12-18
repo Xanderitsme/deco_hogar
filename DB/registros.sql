@@ -41,7 +41,7 @@ insert into cuentas (trabajadorID, usuario, clave) values
 (15, 'cajero3', '$2y$10$TORfmQfZLMkBFHbYAkq4ief4Un1C91G45LBMxAiRt6V2l4s3tZQWe'),
 (16, 'cargador3', '$2y$10$TORfmQfZLMkBFHbYAkq4ief4Un1C91G45LBMxAiRt6V2l4s3tZQWe');
 
-update cuentas set foto = 'admin_68.jpg' where cuentas.`ID` = 1;
+update cuentas set foto = 'admin_85_170601.jpg' where cuentas.`ID` = 1;
 
 -- https://importacionesrubi.com.pe/
 -- insert into proveedores (denominacion_social, `RUC`, tiempo_envio, ubicacion) values

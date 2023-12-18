@@ -22,25 +22,25 @@ class productController extends mainModel
       exit();
     }
 
-    if ($this->verificarDatos("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]{1,100}", $nombre)) {
+    if ($this->verificarDatos("[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9\- ]{1,100}", $nombre)) {
       $alerta = $this->crearAlertaError("El nombre no coincide con el formato solicitado: ");
       return json_encode($alerta);
       exit();
     }
 
-    if ($this->verificarDatos("[0-9]{1,5}", $stock)) {
+    if ($this->verificarDatos("[0-9]{1,4}", $stock)) {
       $alerta = $this->crearAlertaError("El stock no coincide con el formato solicitado: ");
       return json_encode($alerta);
       exit();
     }
 
-    if ($this->verificarDatos("[0-9]{1,5}\.[0-9]{2}", $precioVenta)) {
+    if ($this->verificarDatos("^\d{1,5}(?:\.\d{1,2})?$", $precioVenta)) {
       $alerta = $this->crearAlertaError("El precio de venta no coincide con el formato solicitado: ");
       return json_encode($alerta);
       exit();
     }
 
-    if ($this->verificarDatos("[0-9]{1,5}\.[0-9]{2}", $precioCompra)) {
+    if ($this->verificarDatos("^\d{1,5}(?:\.\d{1,2})?$", $precioCompra)) {
       $alerta = $this->crearAlertaError("El precio de compra no coincide con el formato solicitado: ");
       return json_encode($alerta);
       exit();

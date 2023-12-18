@@ -11,15 +11,15 @@
 				<div class="control">
 					<label>
 						Nombre del producto *
-						<input class="input" type="text" name="producto_nombre" pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑ ]{1,100}" maxlength="100" required>
+						<input class="input" type="text" name="producto_nombre" pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9\- ]{1,100}" maxlength="100" required>
 					</label>
 				</div>
 			</div>
 			<div class="column">
 				<div class="control">
 					<label>
-						Stock
-						<input class="input" type="number" name="producto_stock" pattern="[0-9]{1,5}" max="99999" required>
+						Stock *
+						<input class="input" type="number" name="producto_stock" pattern="[0-9]{1,4}" max="9999" required>
 					</label>
 				</div>
 			</div>
@@ -29,7 +29,7 @@
 				<div class="control">
 					<label>
 						Precio de venta *
-						<input class="input" type="text" name="producto_precio_venta" pattern="[0-9]{1,5}\.[0-9]{2}" maxlength="8" placeholder="1199.99" required>
+						<input class="input" type="text" name="producto_precio_venta" pattern="^\d{1,5}(?:\.\d{1,2})?$" maxlength="8" placeholder="1199.99" required>
 					</label>
 				</div>
 			</div>
@@ -37,7 +37,7 @@
 				<div class="control">
 					<label>
 						Precio de compra *
-						<input class="input" type="text" name="producto_precio_compra" pattern="[0-9]{1,5}\.[0-9]{2}" maxlength="8" placeholder="1199.99" required>
+						<input class="input" type="text" name="producto_precio_compra" pattern="^\d{1,5}(?:\.\d{1,2})?$" maxlength="8" placeholder="1199.99" required>
 					</label>
 				</div>
 			</div>

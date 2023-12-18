@@ -22,25 +22,18 @@ class productModel extends mainModel implements Producto
   {
     $datosProducto = $this->empaquetarDatos(self::CAMPOS_TABLA, $datos);
 
-    if (is_null($datosProducto)) {
-      $alerta = $this->crearAlertaError("Ocurrió un error al procesar los datos del producto, por favor intente más tarde");
-      return $alerta;
-    }
+    if (is_null($datosProducto))
+      return $this->crearAlertaError("Ocurrió un error al procesar los datos del producto, por favor intente más tarde");
 
     $registrar = $this->guardarDatos(self::NOMBRE_TABLA, $datosProducto);
 
-    if (is_null($registrar)) {
-      $alerta = $this->crearAlertaError("No se pudo registrar el producto, por favor intente más tarde");
-      return $alerta;
-    }
+    if (is_null($registrar))
+      return $this->crearAlertaError("No se pudo registrar el producto, por favor intente más tarde");
 
-    if ($registrar->rowCount() == 1) {
-      $alerta = $this->crearAlertaLimpiarSuccess("Producto registrado", "El producto " . $datos[0] . " ha sido registrado exitosamente");
-    } else {
-      $alerta = $this->crearAlertaError("No se pudo registrar el producto, por favor intente nuevamente");
-    }
+    if ($registrar->rowCount() == 0)
+      return $this->crearAlertaError("No se pudo registrar el producto, por favor intente nuevamente");
 
-    return $alerta;
+    return $this->crearAlertaLimpiarSuccess("Producto registrado", "El producto " . $datos[0] . " ha sido registrado exitosamente");
   }
 
   public function obtener($id)
