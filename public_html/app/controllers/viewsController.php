@@ -6,7 +6,6 @@ use app\models\viewsModel;
 
 class viewsController extends viewsModel
 {
-
     public function obtenerVistasControlador($vista)
     {
         if ($vista != "") {
@@ -14,6 +13,7 @@ class viewsController extends viewsModel
         } else {
             $respuesta = "login";
         }
+
         return $respuesta;
     }
 }
