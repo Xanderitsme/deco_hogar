@@ -332,7 +332,7 @@ class trabajadorController extends mainModel
     return json_encode($alerta);
   }
 
-  public function obtenerCargos()
+  public function obtenerCargos($id)
   {
     $listaCargos = '';
 
@@ -347,7 +347,78 @@ class trabajadorController extends mainModel
     $cargos = $cargos->fetchAll();
 
     foreach ($cargos as $cargo) {
-      $listaCargos .= '<option value="' . $cargo['ID'] . '">' . $cargo['nombre_cargo'] . '</option>';
+      $listaCargos .= ($cargo['ID'] == $id)
+      ?'<option value="' . $cargo['ID'] . '" selected>' . $cargo['nombre_cargo'] . '</option>'
+      :'<option value="' . $cargo['ID'] . '">' . $cargo['nombre_cargo'] . '</option>';
+    }
+
+    return $listaCargos;
+  }
+
+  public function obtenerCargosNoCargador($id)
+  {
+    $listaCargos = '';
+
+    $consulta_cargos = "select ID, nombre_cargo from cargos where ID <> 5 order by nombre_cargo desc";
+
+    $cargos = $this->ejecutarConsulta($consulta_cargos);
+
+    if (is_null($cargos)) {
+      return $this->mostrarError("Ha ocurrido un error al intentar cargar los cargos");
+    }
+
+    $cargos = $cargos->fetchAll();
+
+    foreach ($cargos as $cargo) {
+      $listaCargos .= ($cargo['ID'] == $id)
+      ?'<option value="' . $cargo['ID'] . '" selected>' . $cargo['nombre_cargo'] . '</option>'
+      :'<option value="' . $cargo['ID'] . '">' . $cargo['nombre_cargo'] . '</option>';
+    }
+
+    return $listaCargos;
+  }
+
+  public function obtenerCargosNoAdmin($id)
+  {
+    $listaCargos = '';
+
+    $consulta_cargos = "select ID, nombre_cargo from cargos where ID <> 1 order by nombre_cargo desc";
+
+    $cargos = $this->ejecutarConsulta($consulta_cargos);
+
+    if (is_null($cargos)) {
+      return $this->mostrarError("Ha ocurrido un error al intentar cargar los cargos");
+    }
+
+    $cargos = $cargos->fetchAll();
+
+    foreach ($cargos as $cargo) {
+      $listaCargos .= ($cargo['ID'] == $id)
+      ?'<option value="' . $cargo['ID'] . '" selected>' . $cargo['nombre_cargo'] . '</option>'
+      :'<option value="' . $cargo['ID'] . '">' . $cargo['nombre_cargo'] . '</option>';
+    }
+
+    return $listaCargos;
+  }
+
+  public function obtenerCargosNoCargadorAdmin($id)
+  {
+    $listaCargos = '';
+
+    $consulta_cargos = "select ID, nombre_cargo from cargos where ID <> 1 and ID <> 5 order by nombre_cargo desc";
+
+    $cargos = $this->ejecutarConsulta($consulta_cargos);
+
+    if (is_null($cargos)) {
+      return $this->mostrarError("Ha ocurrido un error al intentar cargar los cargos");
+    }
+
+    $cargos = $cargos->fetchAll();
+
+    foreach ($cargos as $cargo) {
+      $listaCargos .= ($cargo['ID'] == $id)
+      ?'<option value="' . $cargo['ID'] . '" selected>' . $cargo['nombre_cargo'] . '</option>'
+      :'<option value="' . $cargo['ID'] . '">' . $cargo['nombre_cargo'] . '</option>';
     }
 
     return $listaCargos;
