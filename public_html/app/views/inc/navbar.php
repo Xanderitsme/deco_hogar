@@ -13,8 +13,9 @@
   <div id="navbar-links" class="navbar-menu">
     <div class="navbar-start">
 
+      <?php if (in_array($_SESSION['cargoId'], [1, 3, 4])) { ?>
       <div class="navbar-item has-dropdown is-hoverable">
-        <a class="navbar-link" href="<?php echo APP_URL; ?>listaProformasVenta/">
+        <a class="navbar-link" href="<?php echo APP_URL; ?>nuevaProformaVenta/">
           Proformas de venta
         </a>
         <div class="navbar-dropdown is-boxed">
@@ -26,7 +27,9 @@
           </a>
         </div>
       </div>
+      <?php } ?>
 
+      <?php if (in_array($_SESSION['cargoId'], [1, 3, 4])) { ?>
       <div class="navbar-item has-dropdown is-hoverable">
         <a class="navbar-link" href="<?php echo APP_URL; ?>listaClientes/">
           Clientes
@@ -40,7 +43,9 @@
           </a>
         </div>
       </div>
+      <?php } ?>
 
+      <?php if (in_array($_SESSION['cargoId'], [1, 2])) { ?>
       <div class="navbar-item has-dropdown is-hoverable">
         <a class="navbar-link" href="<?php echo APP_URL; ?>listaMovimientosInventario/">
           Inventario
@@ -57,7 +62,9 @@
           </a>
         </div>
       </div>
+      <?php } ?>
 
+      <?php if (in_array($_SESSION['cargoId'], [1, 2])) { ?>
       <div class="navbar-item has-dropdown is-hoverable">
         <a class="navbar-link" href="<?php echo APP_URL; ?>listaOrdenesCompra/">
           Ordenes de compra
@@ -71,7 +78,9 @@
           </a>
         </div>
       </div>
+      <?php } ?>
 
+      <?php if (in_array($_SESSION['cargoId'], [1])) { ?>
       <div class="navbar-item has-dropdown is-hoverable">
         <a class="navbar-link" href="<?php echo APP_URL; ?>listaTrabajadores/">
           Trabajadores
@@ -85,7 +94,9 @@
           </a>
         </div>
       </div>
+      <?php } ?>
 
+      <?php if (in_array($_SESSION['cargoId'], [1])) { ?>
       <div class="navbar-item has-dropdown is-hoverable">
         <a class="navbar-link" href="<?php echo APP_URL; ?>listaUsuarios/">
           Usuarios
@@ -99,12 +110,13 @@
           </a>
         </div>
       </div>
+      <?php } ?>
 
     </div>
 
     <div class="navbar-end">
       <div class="navbar-item has-dropdown is-hoverable">
-        <a class="navbar-link">
+        <a class="navbar-link" style="min-width: 150px;">
           <?php
           echo $_SESSION['nombres'] . " " . $_SESSION['apellidos'] . "<br>" . $_SESSION['cargo'];
           ?>
