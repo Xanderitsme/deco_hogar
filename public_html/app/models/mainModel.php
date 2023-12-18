@@ -9,7 +9,8 @@ if (file_exists(__DIR__ . "/../../config/server.php")) {
   require_once __DIR__ . "/../../config/server.php";
 }
 
-interface Objeto {
+interface Objeto
+{
   function registrar($datos);
   function obtener($id);
   function actualizar($id, $datos);
@@ -169,7 +170,7 @@ class mainModel
       if ($contador >= 1) {
         $query .= ",";
       }
-      $query .= $clave["campo_nombre"] . "=" . $clave["campo_marcador"];
+      $query .= $clave["campo_nombre"] . " = ifnull(" . $clave["campo_marcador"] . ", " . $clave["campo_nombre"] . ")";
       $contador++;
     }
 
@@ -181,6 +182,7 @@ class mainModel
       foreach ($datos as $clave) {
         $sql->bindParam($clave["campo_marcador"], $clave["campo_valor"]);
       }
+
       $sql->bindParam($condicion["condicion_marcador"], $condicion["condicion_valor"]);
 
       $sql->execute();
@@ -225,6 +227,17 @@ class mainModel
     }
 
     return $datosEmpaquetados;
+  }
+
+  protected function empaquetarCondicion($campo, $valor)
+  {
+    $condicionEmpaquetada = [
+      "condicion_campo" => $campo,
+      "condicion_marcador" => ":" . $campo,
+      "condicion_valor" => $valor
+    ];
+
+    return $condicionEmpaquetada;
   }
 
   protected function paginadorTablas($pagina, $numeroPaginas, $url, $botones)
