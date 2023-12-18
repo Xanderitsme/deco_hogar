@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     });
   });
-
 });
 
 function mostrarImagenPreview(event) {
@@ -25,6 +24,21 @@ function mostrarImagenPreview(event) {
   };
 
   if (input.files && input.files[0]) {
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+function mostrarImagenVistaPrevia(event) {
+  const input = event.target;
+  const fileCta = document.querySelector('.file-cta');
+
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+      fileCta.style.backgroundImage = `url('${e.target.result}')`;
+    };
+
     reader.readAsDataURL(input.files[0]);
   }
 }
