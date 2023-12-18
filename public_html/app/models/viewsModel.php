@@ -2,6 +2,8 @@
 
 namespace app\models;
 
+use app\controllers\loginController;
+
 class viewsModel
 {
     protected function obtenerVistasModelo($vista)
@@ -56,14 +58,22 @@ class viewsModel
             $usuarios
         );
 
+        $insLogin = new loginController();
+
         if (in_array($vista, $listaBlanca)) {
             if (is_file("./app/views/content/" . $vista . "-view.php")) {
-                $contenido = "./app/views/content/" . $vista . "-view.php";
+                if ($insLogin->permisoAccesoVista($vista)) {
+                    $contenido = "./app/views/content/" . $vista . "-view.php";
+                } else {
+                    $contenido = "403";
+                }
             } else {
                 $contenido = "404";
             }
         } elseif ($vista == "login" || $vista == "index") {
             $contenido = "login";
+        } elseif ($vista == "403") {
+            $contenido = "403";
         } else {
             $contenido = "404";
         }
