@@ -4,42 +4,48 @@ namespace app\models;
 
 use app\models\mainModel;
 
-class proformaVentaModel extends mainModel
+interface ProformaVenta extends Objeto
 {
-  private const NOMBRE_TABLA = "proformas_venta";
-  private const CAMPOS_TABLA = [
+  const NOMBRE_TABLA = "proformas_venta";
+  const CAMPOS_TABLA = [
     "total",
     "fecha",
     "clienteID",
     "vendedorID",
     "estado"
   ];
+}
 
-  public function registrarProformaVenta($nombre, $descripcion, $precioVenta, $precioCompra, $stock)
+class proformaVentaModel extends mainModel implements ProformaVenta
+{
+  public function registrar($datos)
   {
-    $datos = [$nombre, $descripcion, $precioVenta, $precioCompra, $stock];
+    $datosProformaVenta = $this->empaquetarDatos(self::CAMPOS_TABLA, $datos);
 
-    $datosProducto = $this->empaquetarDatos(self::CAMPOS_TABLA, $datos);
+    if (is_null($datosProformaVenta))
+      return $this->crearAlertaError("Ocurrió un error al procesar los datos de la proforma de venta, por favor intente más tarde");
 
-    if (is_null($datosProducto)) {
-      $alerta = $this->crearAlertaError("Ocurrió un error al procesar los datos del producto, por favor intente más tarde");
-      return $alerta;
-    }
+    $registrar = $this->guardarDatos(self::NOMBRE_TABLA, $datosProformaVenta);
 
-    $registrar = $this->guardarDatos(self::NOMBRE_TABLA, $datosProducto);
+    if (is_null($registrar))
+      return $this->crearAlertaError("No se pudo registrar la proforma de venta, por favor intente más tarde");
 
-    if (is_null($registrar)) {
-      $alerta = $this->crearAlertaError("No se pudo registrar el producto, por favor intente más tarde");
-      return $alerta;
-    }
+    if ($registrar->rowCount() == 0)
+      return $this->crearAlertaError("No se pudo registrar la proforma de venta, por favor intente nuevamente");
 
-    if ($registrar->rowCount() == 1) {
-      $alerta = $this->crearAlertaLimpiarSuccess("Producto registrado", "El producto " . $nombre . " ha sido registrado exitosamente");
-    } else {
-      $alerta = $this->crearAlertaError("No se pudo registrar el producto, por favor intente nuevamente");
-    }
+    return $this->crearAlertaLimpiarSuccess("Proforma de venta registrada", "La proforma " . $datos[0] . " ha sido registrado exitosamente");
+  }
 
-    return $alerta;
+  public function obtener($id)
+  {
+  }
+
+  public function actualizar($id, $datos)
+  {
+  }
+
+  public function eliminar($id)
+  {
   }
 
   public function obtenerProductosProformaVenta($id)
@@ -58,7 +64,7 @@ class proformaVentaModel extends mainModel
     if (is_null($datos)) {
       return null;
     }
-  
+
     return $datos->fetchAll();
   }
 }
