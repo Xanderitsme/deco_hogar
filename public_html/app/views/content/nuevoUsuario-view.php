@@ -10,8 +10,18 @@
 			<div class="column">
 				<div class="control">
 					<label>
-						ID trabajador *
-						<input class="input" type="text" name="usuario_trabajador_id" pattern="[1-9]{1,4}" maxlength="4" required>
+						Trabajador *
+						<select class="input" name="usuario_trabajador_id" pattern="[0-9]{1,4}" maxlength="3" required>
+							<?php
+
+							use app\controllers\userController;
+
+							$insUsuario = new userController();
+
+							echo $insUsuario->obtenerTrabajadoresSinCuenta(0);
+							?>
+							<option value="0" selected>Seleccione un trabajador</option>
+						</select>
 					</label>
 				</div>
 			</div>
