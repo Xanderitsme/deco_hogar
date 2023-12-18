@@ -28,7 +28,7 @@ if (isset($_GET["views"])) {
     $viewsController = new viewsController();
     $vista = $viewsController->obtenerVistasControlador($url[0]);
 
-    if ($vista == "login" || $vista == "404") {
+    if ($vista == "login" || $vista == "404" || $vista == "403") {
       require_once "./app/views/content/" . $vista . "-view.php";
     } else {
       if (!isset($_SESSION['id']) || !isset($_SESSION['trabajadorId']) || empty($_SESSION['id']) || empty($_SESSION['trabajadorId'])) {
