@@ -3,13 +3,14 @@
 namespace app\controllers;
 
 use app\models\mainModel;
+use app\models\trabajadorModel;
+use app\models\userModel;
 use PDO;
 
 class userController extends mainModel
 {
   public function registrarUsuarioControlador()
   {
-
     $trabajadorId = $this->limpiarCadena($_POST["usuario_trabajador_id"]);
     $usuario = $this->limpiarCadena($_POST["usuario_usuario"]);
     $clave1 = $this->limpiarCadena($_POST["usuario_clave_1"]);
@@ -21,7 +22,7 @@ class userController extends mainModel
       exit();
     }
 
-    if ($this->verificarDatos("[1-9]{1,4}", $trabajadorId)) {
+    if ($this->verificarDatos("[0-9]{1,3}", $trabajadorId)) {
       $alerta = $this->crearAlertaError("El ID del trabajador no coincide con el formato solicitado");
       return json_encode($alerta);
       exit();
@@ -43,9 +44,9 @@ class userController extends mainModel
       $alerta = $this->crearAlertaError("Las claves que acaba de ingresar no coinciden");
       return json_encode($alerta);
       exit();
-    } else {
-      $clave = password_hash($clave1, PASSWORD_BCRYPT, ["cost" => 10]);
     }
+
+    $clave = password_hash($clave1, PASSWORD_BCRYPT, ["cost" => 10]);
 
     $check_trabajadorId = $this->ejecutarConsulta("select ID from trabajadores where ID = $trabajadorId");
 
@@ -86,45 +87,13 @@ class userController extends mainModel
       exit();
     }
 
-    $img_dir = "../views/fotos/";
+    $insUser = new userModel();
 
     if ($_FILES['usuario_foto']['name'] != "" && $_FILES['usuario_foto']['size'] > 0) {
-      if (!file_exists($img_dir)) {
-        if (!mkdir($img_dir, 0777)) {
-          $alerta = $this->crearAlertaError("Error al crear el directorio");
-          return json_encode($alerta);
-          exit();
-        }
-      }
+      $foto = $insUser->guardarFoto($usuario);
 
-      if (mime_content_type($_FILES['usuario_foto']['tmp_name']) != "image/jpeg" && mime_content_type($_FILES['usuario_foto']['tmp_name']) != "image/png") {
-        $alerta = $this->crearAlertaError("La imagen que ha seleccionado es de un formato no permitido");
-        return json_encode($alerta);
-        exit();
-      }
-
-      if (($_FILES['usuario_foto']['size'] / 1024) > 5120) {
-        $alerta = $this->crearAlertaError("La imagen que ha seleccionado supera el peso permitido");
-        return json_encode($alerta);
-        exit();
-      }
-
-      $foto = str_ireplace(" ", "_", $usuario);
-      $foto = $foto . "_" . rand(0, 100);
-
-      switch (mime_content_type($_FILES['usuario_foto']['tmp_name'])) {
-        case 'image/jpeg':
-          $foto = $foto . ".jpg";
-          break;
-        case 'image/png':
-          $foto = $foto . ".png";
-          break;
-      }
-
-      chmod($img_dir, 0777);
-
-      if (!move_uploaded_file($_FILES['usuario_foto']['tmp_name'], $img_dir . $foto)) {
-        $alerta = $this->crearAlertaError("No podemos subir la imagen al sistema en este momento");
+      if (is_array($foto)) {
+        $alerta = $foto;
         return json_encode($alerta);
         exit();
       }
@@ -132,50 +101,7 @@ class userController extends mainModel
       $foto = "";
     }
 
-    $usuario_datos_reg = [
-      [
-        "campo_nombre" => "trabajadorID",
-        "campo_marcador" => ":trabajadorId",
-        "campo_valor" => $trabajadorId
-      ],
-      [
-        "campo_nombre" => "usuario",
-        "campo_marcador" => ":usuario",
-        "campo_valor" => $usuario
-      ],
-      [
-        "campo_nombre" => "clave",
-        "campo_marcador" => ":clave",
-        "campo_valor" => $clave
-      ],
-      [
-        "campo_nombre" => "foto",
-        "campo_marcador" => ":foto",
-        "campo_valor" => $foto
-      ],
-    ];
-
-    $registrarUsuario = $this->guardarDatos("cuentas", $usuario_datos_reg);
-
-    if (!is_null($registrarUsuario)) {
-      if ($registrarUsuario->rowCount() == 1) {
-        $alerta = $this->crearAlertaLimpiarSuccess("Usuario registrado", "El usuario '" . $usuario . "' ha sido registrado exitosamente");
-      } else {
-        if (is_file($img_dir . $foto)) {
-          chmod($img_dir . $foto, 0777);
-          unlink($img_dir . $foto);
-        }
-
-        $alerta = $this->crearAlertaError("No se pudo registrar el usuario, por favor intente nuevamente");
-      }
-    } else {
-      if (is_file($img_dir . $foto)) {
-        chmod($img_dir . $foto, 0777);
-        unlink($img_dir . $foto);
-      }
-
-      $alerta = $this->crearAlertaError("No se pudo registrar el usuario, por favor intente más tarde");
-    }
+    $alerta = $insUser->registrar([$trabajadorId, $usuario, $clave, $foto]);
 
     return json_encode($alerta);
   }
@@ -276,8 +202,7 @@ class userController extends mainModel
                 <tr>
                     <th class="has-text-centered">#</th>
                     <th class="has-text-centered">Usuario</th>
-                    <th class="has-text-centered">Nombres</th>
-                    <th class="has-text-centered">Apellidos</th>
+                    <th class="has-text-centered">Nombres y apellidos</th>
                     <th class="has-text-centered">Cargo</th>
                     <th class="has-text-centered" colspan="2">Opciones</th>
                 </tr>
@@ -294,8 +219,7 @@ class userController extends mainModel
                 <tr class="has-text-centered" >
                     <td>' . $contador . '</td>
                     <td>' . $rows['usuario'] . '</td>
-                    <td>' . $rows['nombres'] . '</td>
-                    <td>' . $rows['apellidos'] . '</td>
+                    <td>' . $rows['nombres'] . ' '  . $rows['apellidos'] . '</td>
                     <td>' . $rows['nombre_cargo'] . '</td>
                     <td>
                         <a href="' . APP_URL . 'actualizarUsuario/' . $rows['ID'] . '/" class="button is-success is-rounded is-small">Actualizar</a>
@@ -319,7 +243,7 @@ class userController extends mainModel
       if ($total >= 1) {
         $tabla .= '
                 <tr class="has-text-centered" >
-                    <td colspan="7">
+                    <td colspan="6">
                         <a href="' . $url . '1/" class="button is-link is-rounded is-small mt-4 mb-4">
                             Haga clic acá para recargar el listado
                         </a>
@@ -329,7 +253,7 @@ class userController extends mainModel
       } else {
         $tabla .= '
                 <tr class="has-text-centered" >
-                    <td colspan="7">
+                    <td colspan="6">
                         No hay registros en el sistema
                     </td>
                 </tr>
@@ -403,12 +327,241 @@ class userController extends mainModel
         unlink("../views/fotos/" . $datos['foto']);
       }
 
-      $alerta = $this->crearAlertaRecargar("Usuario eliminado", "El usuario " . $datos['usuario'] . " (" . $datos['nombres'] . " " . $datos['apellidos'] . ") se eliminó con éxito");
+      $alerta = $this->crearAlertaRecargar("Usuario eliminado", "El usuario " . $datos['usuario'] . " '" . $datos['nombres'] . " " . $datos['apellidos'] . "' se eliminó con éxito");
     } else {
-      $alerta = $this->crearAlertaError("No se pudo eliminar el usuario "  . $datos['usuario'] . " (" . $datos['nombres'] . " " . $datos['apellidos'] . "), por favor intente nuevamente");
+      $alerta = $this->crearAlertaError("No se pudo eliminar el usuario "  . $datos['usuario'] . " '" . $datos['nombres'] . " " . $datos['apellidos'] . "', por favor intente nuevamente");
     }
 
     return json_encode($alerta);
+  }
+
+  public function actualizarUsuarioControlador()
+  {
+    $id = $this->limpiarCadena($_POST['usuario_id']);
+
+    $insUser = new userModel();
+
+    $datos = $insUser->obtener($id);
+
+    if (is_null($datos)) {
+      $alerta = $this->crearAlertaError('Ha ocurrido un error al intentar cargar los datos del usuario');
+      return json_encode($alerta);
+      exit();
+    }
+
+    if ($datos == 0) {
+      $alerta = $this->crearAlertaError('No pudimos encontrar ese usuario en el sistema');
+      return json_encode($alerta);
+      exit();
+    }
+
+    $admin_usuario = $this->limpiarCadena($_POST['administrador_usuario']);
+    $admin_clave = $this->limpiarCadena($_POST['administrador_clave']);
+
+    if (empty($admin_usuario) || empty($admin_clave)) {
+      $alerta = $this->crearAlertaError("No has llenado todos los campos que son obligatorios, correspondientes a su USUARIO y CLAVE como administrador");
+      return json_encode($alerta);
+      exit();
+    }
+
+    if ($this->verificarDatos("[a-zA-Z0-9]{4,20}", $admin_usuario)) {
+      $alerta = $this->crearAlertaError("Su usuario no coincide con el formato solicitado");
+      return json_encode($alerta);
+      exit();
+    }
+
+    if ($this->verificarDatos("[a-zA-Z0-9$@._\-]{5,20}", $admin_clave)) {
+      $alerta = $this->crearAlertaError("Su clave no coincide con el formato solicitado");
+      return json_encode($alerta);
+      exit();
+    }
+
+    $checkAdmin = $this->ejecutarConsulta("
+      select * from cuentas 
+      where usuario = '$admin_usuario'
+      and ID = " . $_SESSION['id'] . "
+    ");
+
+    if (is_null($checkAdmin)) {
+      $alerta = $this->crearAlertaError("Ha ocurrido un error al intentar verificar sus datos de administrador");
+      return json_encode($alerta);
+      exit();
+    }
+
+    if ($checkAdmin->rowCount() == 0) {
+      $alerta = $this->crearAlertaError("Las credenciales de acceso ingresadas no coinciden con la sesión actual");
+      return json_encode($alerta);
+      exit();
+    }
+
+    $datosAdmin = $checkAdmin->fetch(PDO::FETCH_ASSOC);
+
+    if ($datosAdmin['usuario'] != $admin_usuario || !password_verify($admin_clave, $datosAdmin['clave'])) {
+      $alerta = $this->crearAlertaError("Clave incorrecta");
+      return json_encode($alerta);
+      exit();
+    }
+
+    $usuario = $this->limpiarCadena($_POST['usuario_usuario']);
+    $cargoId = $this->limpiarCadena($_POST['trabajador_cargo']);
+    $clave1 = $this->limpiarCadena($_POST['usuario_clave_1']);
+    $clave2 = $this->limpiarCadena($_POST['usuario_clave_2']);
+
+    if (empty($usuario) || empty($cargoId)) {
+      $alerta = $this->crearAlertaError("No has llenado todos los campos que son obligatorios");
+      return json_encode($alerta);
+      exit();
+    }
+
+    if ($this->verificarDatos("[a-zA-Z0-9]{4,20}", $usuario)) {
+      $alerta = $this->crearAlertaError("El usuario no coincide con el formato solicitado");
+      return json_encode($alerta);
+      exit();
+    }
+
+    if ($this->verificarDatos("[1-9]{1,3}", $cargoId)) {
+      $alerta = $this->crearAlertaError("El cargo no coincide con el formato solicitado");
+      return json_encode($alerta);
+      exit();
+    }
+
+    if ($cargoId != $datos['cargoID'] && $_SESSION['cargoId'] == 1 && $id != 1) {
+      $check_cargo = $this->ejecutarConsulta("select ID from cargos where ID = $cargoId");
+
+      if (is_null($check_cargo)) {
+        $alerta = $this->crearAlertaError("El cargo ingresado no existe");
+        return json_encode($alerta);
+        exit();
+      }
+
+      if ($check_cargo->rowCount() == 0) {
+        $alerta = $this->crearAlertaError("El cargo ingresado no existe");
+        return json_encode($alerta);
+        exit();
+      }
+    } else {
+      $cargoId = null;
+    }
+
+    if ($usuario != $datos['usuario']) {
+      $check_usuario = $this->ejecutarConsulta("select usuario from cuentas where usuario = '$usuario'");
+
+      if (is_null($check_usuario)) {
+        $alerta = $this->crearAlertaError("Ha ocurrido un error al intentar verificar los datos del usuario");
+        return json_encode($alerta);
+        exit();
+      }
+
+      if ($check_usuario->rowCount() > 0) {
+        $alerta = $this->crearAlertaError("El nombre de usuario ingresado ya se encuentra registrado");
+        return json_encode($alerta);
+        exit();
+      }
+    } else {
+      $usuario = null;
+    }
+
+    if (!empty($clave1) || !empty($clave2)) {
+      if ($this->verificarDatos("[a-zA-Z0-9$@._\-]{5,20}", $clave1) || $this->verificarDatos("[a-zA-Z0-9$@._\-]{5,20}", $clave2)) {
+        $alerta = $this->crearAlertaError("Las claves no coinciden con el formato solicitado");
+        return json_encode($alerta);
+        exit();
+      }
+
+      if ($clave1 != $clave2) {
+        $alerta = $this->crearAlertaError("Las claves que acaba de ingresar no coinciden");
+        return json_encode($alerta);
+        exit();
+      }
+
+      $clave = password_hash($clave1, PASSWORD_BCRYPT, ["cost" => 10]);
+    } else {
+      $clave = null;
+    }
+
+    if ($_FILES['usuario_foto']['name'] != "" && $_FILES['usuario_foto']['size'] > 0) {
+      $foto = $insUser->guardarFoto((is_null($usuario) ? $datos['usuario'] : $usuario));
+
+      if (is_array($foto)) {
+        $alerta = $foto;
+        return json_encode($alerta);
+        exit();
+      }
+    } else {
+      $foto = null;
+    }
+
+    if (is_null($usuario) && is_null($cargoId) && is_null($clave) && is_null($foto)) {
+      $alerta = $this->crearAlertaRecargar("No se ha modificado ningún dato", "No ha ingresado ningún dato nuevo para ser cambiado");
+      return json_encode($alerta);
+      exit();
+    }
+
+    if (!is_null($usuario) || !is_null($clave) || !is_null($foto)) {
+      $actualizarUser = $insUser->actualizar($id, [null, $usuario, $clave, $foto]);
+
+      if (!$actualizarUser) {
+        $alerta = $this->crearAlertaError("No se pudieron actualizar los datos del usuario, por favor intente nuevamente");
+        return json_encode($alerta);
+      }
+
+      if (!is_null($foto)) $insUser->eliminarFoto($datos['foto']);
+    }
+
+    if (!is_null($cargoId)) {
+      $insTrabajador = new trabajadorModel();
+
+      $actualizarTrabajador = $insTrabajador->actualizar($datos['trabajadorID'], [null, null, null, null, null, null, null, $cargoId]);
+
+      if (!$actualizarTrabajador) {
+        $alerta = $this->crearAlertaError("No se pudo actualizar el cargo del usuario, por favor intente nuevamente");
+        return json_encode($alerta);
+      }
+    }
+    
+    $alerta = $this->crearAlertaRecargar("Usuario actualizado", "Los datos del usuario han sido actualizados exitosamente");
+    return json_encode($alerta);
+  }
+
+  public function obtenerDatosUsuario($id)
+  {
+    $id = $this->limpiarCadena($id);
+
+    $insUser = new userModel();
+
+    return $insUser->obtener($id);
+  }
+
+  public function obtenerTrabajadoresSinCuenta($id)
+  {
+    $listaTrabajadores = '';
+
+    $consulta_trabajadores = "
+      select 
+        trabajadores.ID, 
+        trabajadores.nombres,
+        trabajadores.apellidos
+      from trabajadores 
+      left join cuentas on trabajadores.ID = cuentas.trabajadorID
+      where (cuentas.trabajadorID is null and trabajadores.cargoID <> 5)
+      or cuentas.trabajadorID = $id
+      order by apellidos desc";
+
+    $trabajadores = $this->ejecutarConsulta($consulta_trabajadores);
+
+    if (is_null($trabajadores)) {
+      return $this->mostrarError("Ha ocurrido un error al intentar cargar los cargos");
+    }
+
+    $trabajadores = $trabajadores->fetchAll();
+
+    foreach ($trabajadores as $trabajador) {
+      $listaTrabajadores .= ($trabajador['ID'] == $id)
+        ? '<option value="' . $trabajador['ID'] . '" selected>' . $trabajador['nombres'] . ' ' . $trabajador['apellidos'] . '</option>'
+        : '<option value="' . $trabajador['ID'] . '">' . $trabajador['nombres'] . ' ' . $trabajador['apellidos'] . '</option>';
+    }
+
+    return $listaTrabajadores;
   }
 
   private function errorRegistroUsuario()
