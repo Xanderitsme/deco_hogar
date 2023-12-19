@@ -12,12 +12,7 @@
 
   <div id="navbar-links" class="navbar-menu">
     <div class="navbar-start">
-      <?php
-      if (
-        $insLogin->permisoAccesoVista('nuevaProformaVenta') ||
-        $insLogin->permisoAccesoVista('listaProformasVenta')
-      ) {
-      ?>
+      <?php if ($insLogin->permisoAccesoVista('proformas_venta')) { ?>
         <div class="navbar-item has-dropdown is-hoverable">
           <a class="navbar-link">
             Proformas de venta
@@ -33,12 +28,7 @@
         </div>
       <?php } ?>
 
-      <?php
-      if (
-        $insLogin->permisoAccesoVista('nuevoCliente') ||
-        $insLogin->permisoAccesoVista('listaClientes')
-      ) {
-      ?>
+      <?php if ($insLogin->permisoAccesoVista('clientes')) { ?>
         <div class="navbar-item has-dropdown is-hoverable">
           <a class="navbar-link">
             Clientes
@@ -54,13 +44,7 @@
         </div>
       <?php } ?>
 
-      <?php
-      if (
-        $insLogin->permisoAccesoVista('listaMovimientosInventario') ||
-        $insLogin->permisoAccesoVista('nuevoProducto') ||
-        $insLogin->permisoAccesoVista('listaProductos')
-      ) {
-      ?>
+      <?php if ($insLogin->permisoAccesoVista('inventario')) { ?>
         <div class="navbar-item has-dropdown is-hoverable">
           <a class="navbar-link">
             Inventario
@@ -69,22 +53,19 @@
             <a class="navbar-item" href="<?php echo APP_URL; ?>listaMovimientosInventario/">
               Lista de movimientos de inventario
             </a>
-            <a class="navbar-item" href="<?php echo APP_URL; ?>nuevoProducto/">
-              Nuevo producto
-            </a>
-            <a class="navbar-item" href="<?php echo APP_URL; ?>listaProductos/">
-              Lista de productos
-            </a>
+            <?php if ($insLogin->permisoAccesoVista('productos')) { ?>
+              <a class="navbar-item" href="<?php echo APP_URL; ?>nuevoProducto/">
+                Nuevo producto
+              </a>
+              <a class="navbar-item" href="<?php echo APP_URL; ?>listaProductos/">
+                Lista de productos
+              </a>
+            <?php } ?>
           </div>
         </div>
       <?php } ?>
 
-      <?php
-      if (
-        $insLogin->permisoAccesoVista('nuevaOrdenCompra') ||
-        $insLogin->permisoAccesoVista('listaOrdenesCompra')
-      ) {
-      ?>
+      <?php if ($insLogin->permisoAccesoVista('ordenes_compra')) { ?>
         <div class="navbar-item has-dropdown is-hoverable">
           <a class="navbar-link">
             Ordenes de compra
@@ -100,12 +81,7 @@
         </div>
       <?php } ?>
 
-      <?php
-      if (
-        $insLogin->permisoAccesoVista('nuevoTrabajador') ||
-        $insLogin->permisoAccesoVista('listaTrabajadores')
-      ) {
-      ?>
+      <?php if ($insLogin->permisoAccesoVista('trabajadores')) { ?>
         <div class="navbar-item has-dropdown is-hoverable">
           <a class="navbar-link">
             Trabajadores
@@ -121,12 +97,7 @@
         </div>
       <?php } ?>
 
-      <?php
-      if (
-        $insLogin->permisoAccesoVista('nuevoUsuario') ||
-        $insLogin->permisoAccesoVista('listaUsuarios')
-      ) {
-      ?>
+      <?php if ($insLogin->permisoAccesoVista('usuarios')) { ?>
         <div class="navbar-item has-dropdown is-hoverable">
           <a class="navbar-link">
             Usuarios
