@@ -7,6 +7,8 @@ use PDO;
 
 if (file_exists(__DIR__ . "/../../config/server.php")) {
   require_once __DIR__ . "/../../config/server.php";
+} elseif (file_exists(__DIR__ . "/../../config/local_server.php")) {
+  require_once __DIR__ . "/../../config/local_server.php";
 }
 
 interface Objeto
