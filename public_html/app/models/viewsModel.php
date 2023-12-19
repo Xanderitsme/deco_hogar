@@ -2,71 +2,34 @@
 
 namespace app\models;
 
-use app\controllers\loginController;
-
-class viewsModel
+class viewsModel implements IViews
 {
     protected function obtenerVistasModelo($vista)
     {
-        $listaBlanca = [
-            "dashboard",
-            "logout"
-        ];
+        $listaBlanca = self::LISTA_BLANCA;
 
-        $proformasVenta = [
-            "listaProformasVenta",
-            "nuevaProformaVenta"
-        ];
+        foreach (self::VISTAS as $vistaSeccion) {
+            $listaBlanca = array_merge(
+                $listaBlanca,
+                $vistaSeccion
+            );
+        }
 
-        $clientes = [
-            "listaClientes",
-            "nuevoCliente"
-        ];
-
-        $productos = [
-            "listaProductos",
-            "nuevoProducto"
-        ];
-
-        $inventario = ["listaMovimientosInventario"];
-
-        $ordenesCompra = [
-            "listaOrdenesCompra",
-            "nuevaOrdenCompra"
-        ];
-
-        $trabajadores = [
-            "listaTrabajadores",
-            "nuevoTrabajador",
-            "actualizarTrabajador"
-        ];
-
-        $usuarios = [
-            "listaUsuarios",
-            "nuevoUsuario",
-            "actualizarUsuario"
-        ];
-
-        $listaBlanca = array_merge(
-            $listaBlanca,
-            $proformasVenta,
-            $clientes,
-            $productos,
-            $inventario,
-            $ordenesCompra,
-            $trabajadores,
-            $usuarios
-        );
-
-        $insLogin = new loginController();
+        // $listaBlanca = array_merge(
+        //     self::LISTA_BLANCA,
+        //     self::VISTAS['proformas_venta'],
+        //     self::VISTAS['clientes'],
+        //     self::VISTAS['inventario'],
+        //     self::VISTAS['productos'],
+        //     self::VISTAS['ordenes_compra'],
+        //     self::VISTAS['trabajadores'],
+        //     self::VISTAS['usuarios'],
+        //     self::VISTAS['otros']
+        // );
 
         if (in_array($vista, $listaBlanca)) {
             if (is_file("./app/views/content/" . $vista . "-view.php")) {
-                if ($insLogin->permisoAccesoVista($vista)) {
-                    $contenido = "./app/views/content/" . $vista . "-view.php";
-                } else {
-                    $contenido = "403";
-                }
+                $contenido = "./app/views/content/" . $vista . "-view.php";
             } else {
                 $contenido = "404";
             }
