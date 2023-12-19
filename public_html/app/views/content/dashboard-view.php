@@ -13,6 +13,6 @@
 		</div>
 	</div>
 	<div class="columns is-flex is-justify-content-center mt-3">
-		<h2 class="subtitle">¡Bienvenido <?php echo $_SESSION['nombres'] . " " . $_SESSION['apellidos']; ?>!</h2>
+		<h2 class="subtitle">¡Bienvenid@ <?php echo $_SESSION['nombres'] . " " . $_SESSION['apellidos']; ?>!</h2>
 	</div>
 </div>
