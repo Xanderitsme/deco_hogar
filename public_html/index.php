@@ -28,15 +28,19 @@ if (isset($_GET["views"])) {
     $viewsController = new viewsController();
     $vista = $viewsController->obtenerVistasControlador($url[0]);
 
-    if ($vista == "login" || $vista == "404" || $vista == "403") {
+    if ($vista == "login" || $vista == "404") {
       require_once "./app/views/content/" . $vista . "-view.php";
     } else {
       if (!isset($_SESSION['id']) || !isset($_SESSION['trabajadorId']) || empty($_SESSION['id']) || empty($_SESSION['trabajadorId'])) {
         $insLogin->cerrarSesionControlador();
       }
 
-      require_once "./app/views/inc/navbar.php";
-      require_once $vista;
+      if ($insLogin->permisoAccesoVista($vista)) {
+        require_once "./app/views/inc/navbar.php";
+        require_once $vista;
+      } else {
+        require_once "./app/views/content/403-view.php";
+      }
     }
 
     require_once "./app/views/inc/script.php";
