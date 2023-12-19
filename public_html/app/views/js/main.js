@@ -42,3 +42,8 @@ function mostrarImagenVistaPrevia(event) {
     reader.readAsDataURL(input.files[0]);
   }
 }
+
+function ocultarVistaPrevia() {
+  const fileCta = document.querySelector('.file-cta');
+  fileCta.style.backgroundImage = "none";
+}
