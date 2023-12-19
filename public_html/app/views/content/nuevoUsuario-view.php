@@ -55,7 +55,7 @@
 				<div class="file has-name is-boxed is-fullwidth" style="padding-right: 80px;">
 					<label class="file-label">
 						<input class="file-input" type="file" name="usuario_foto" accept=".jpg, .png, .jpeg" onchange="mostrarImagenVistaPrevia(event)">
-						<span class="file-cta" style="background-size: cover; background-position: center; height: 200px;"></span>
+						<span class="file-cta" style="background-size: cover; background-position: center; height: 260px;"></span>
 						<span class="file-name">JPG, JPEG, PNG. (MAX 5MB)</span>
 					</label>
 				</div>
@@ -64,7 +64,7 @@
 
 		<span>* Obligatorio</span>
 		<p class="has-text-centered mt-6">
-			<button type="reset" class="button is-link is-light is-rounded">Limpiar</button>
+			<button type="reset" class="button is-link is-light is-rounded" onclick="ocultarVistaPrevia()">Limpiar</button>
 			<button type="submit" class="button is-info is-rounded">Guardar</button>
 		</p>
 	</form>
