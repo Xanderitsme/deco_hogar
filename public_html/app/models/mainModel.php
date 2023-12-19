@@ -2,7 +2,7 @@
 
 namespace app\models;
 
-use Exception;
+use PDOException;
 use PDO;
 
 if (file_exists(__DIR__ . "/../../config/server.php")) {
@@ -32,8 +32,10 @@ class mainModel
       $conexion->exec("SET CHARACTER SET utf8");
       $conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
       return $conexion;
-    } catch (Exception $ex) {
-      echo $ex->getMessage();
+    } catch (PDOException  $ex) {
+      // echo $ex->getMessage();
+      echo $this->mostrarError("Ha ocurrido un problema al intentar conectarse a la base de datos, por favor intente más tarde");
+      exit();
     }
   }
 
@@ -42,7 +44,7 @@ class mainModel
     try {
       $sql = $this->conectar()->prepare($consulta);
       $sql->execute();
-    } catch (Exception $e) {
+    } catch (PDOException $e) {
       // echo "Error: " . $e;
       $sql = null;
     }
@@ -131,7 +133,7 @@ class mainModel
         $sql->bindParam($clave["campo_marcador"], $clave["campo_valor"]);
       }
       $sql->execute();
-    } catch (Exception) {
+    } catch (PDOException) {
       $sql = null;
     }
 
@@ -154,7 +156,7 @@ class mainModel
       }
 
       $sql->execute();
-    } catch (Exception) {
+    } catch (PDOException) {
       $sql = null;
     }
 
@@ -186,7 +188,7 @@ class mainModel
       $sql->bindParam($condicion["condicion_marcador"], $condicion["condicion_valor"]);
 
       $sql->execute();
-    } catch (Exception) {
+    } catch (PDOException) {
       $sql = null;
     }
 
@@ -199,7 +201,7 @@ class mainModel
       $sql = $this->conectar()->prepare("delete from $tabla where $campo= :id");
       $sql->bindParam(":id", $id);
       $sql->execute();
-    } catch (Exception) {
+    } catch (PDOException) {
       $sql = null;
     }
 
