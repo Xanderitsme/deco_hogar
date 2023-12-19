@@ -3,13 +3,13 @@
 namespace app\controllers;
 
 use app\models\mainModel;
+use app\models\IViews;
 use PDO;
 
-class loginController extends mainModel
+class loginController extends mainModel implements IViews
 {
   public function iniciarSesionControlador()
   {
-
     $usuario = $this->limpiarCadena($_POST['login_usuario']);
     $clave = $this->limpiarCadena($_POST['login_clave']);
 
@@ -19,12 +19,12 @@ class loginController extends mainModel
     }
 
     if ($this->verificarDatos("[a-zA-Z0-9]{1,20}", $usuario)) {
-      echo $this->errorLogin("El usuario no coincide con el formato solicitado");
+      echo $this->errorLogin("Usuario o clave incorrectos");
       return;
     }
 
     if ($this->verificarDatos("[a-zA-Z0-9$@._\-]{1,20}", $clave)) {
-      echo $this->errorLogin("La clave no coincide con el formato solicitado");
+      echo $this->errorLogin("Usuario o clave incorrectos");
       return;
     }
 
@@ -89,7 +89,6 @@ class loginController extends mainModel
 
   public function cerrarSesionControlador()
   {
-
     session_destroy();
 
     if (headers_sent()) {
@@ -119,58 +118,101 @@ class loginController extends mainModel
 
   public function permisoAccesoVista($vista)
   {
-    if ($vista == "dashboard" || $vista == "logout" || $vista == "actualizarUsuario") return true;
-    
-    switch ($_SESSION['cargoId']) {
-      case 1:
-        return true;
-        break;
+    $extra = ["./app/views/content/", "-view.php"];
 
-      case 2:
-        $permisos = [
-          "listaMovimientosInventario",
-          "listaProductos",
-          "nuevoProducto",
-          "listaOrdenesCompra",
-          "nuevaOrdenCompra"
-        ];
+    $vista = str_replace($extra, '', $vista);
 
-        if (in_array($vista, $permisos)) {
-          return true;
-        }
-        break;
+    $permisosGenerales = [
+      "dashboard",
+      "logout",
+      "actualizarUsuario"
+    ];
 
-      case 3:
-        $permisos = [
-          "listaClientes",
-          "nuevoCliente",
-          "listaProformasVenta",
-          "nuevaProformaVenta"
-        ];
+    if (in_array($vista, $permisosGenerales)) return true;
 
-        if (in_array($vista, $permisos)) {
-          return true;
-        }
-        break;
+    return in_array($vista, $this->getPermisosCargoId());
+  }
 
-      case 4:
-        $permisos = [
-          "listaClientes",
-          "nuevoCliente",
-          "listaProformasVenta",
-          "nuevaProformaVenta"
-        ];
+  public function getPermisosCargoId()
+  {
+    $tiposUsuarios = [
+      1 => 'administrador',
+      2 => 'almacenero',
+      3 => 'vendedor',
+      4 => 'cajero'
+    ];
 
-        if (in_array($vista, $permisos)) {
-          return true;
-        }
-        break;
+    $permisosSecciones = [
+      $tiposUsuarios[1] => [
+        'proformas_venta',
+        'clientes',
+        'inventario',
+        'productos',
+        'ordenes_compra',
+        'trabajadores',
+        'usuarios',
+        'otros'
+      ],
 
-      default:
-        return false;
-        break;
+      $tiposUsuarios[2] => [
+        'inventario',
+        'productos',
+        'ordenes_compra'
+      ],
+
+      $tiposUsuarios[3] => [
+        'proformas_venta',
+        'clientes'
+      ],
+
+      $tiposUsuarios[4] => [
+        'proformas_venta',
+        'clientes'
+      ]
+    ];
+
+    $tipoUsuario = (isset($tiposUsuarios[$_SESSION['cargoId']]))
+      ? $tiposUsuarios[$_SESSION['cargoId']]
+      : null;
+
+    if (is_null($tipoUsuario)) return [];
+
+    $permisosUsuario = [];
+
+    foreach ($permisosSecciones[$tipoUsuario] as $permisoSeccion) {
+      if (isset(self::VISTAS[$permisoSeccion])) {
+        $permisosUsuario = array_merge(
+          $permisosUsuario,
+          self::VISTAS[$permisoSeccion]
+        );
+      }
     }
 
-    return false;
+    return $permisosUsuario;
+
+    // $permisosUsuario = [
+    //   $usuarios[1] => [],
+    //   $usuarios[2] => [],
+    //   $usuarios[3] => [],
+    //   $usuarios[4] => []
+    // ];
+
+    // foreach ($permisosSecciones as $tipoUsuario => $permisosSeccion) {
+    //   foreach ($permisosSeccion as $permisoSeccion) {
+    //     $permisosUsuario[$tipoUsuario] = array_merge(
+    //       $permisosUsuario[$tipoUsuario],
+    //       self::VISTAS[$permisoSeccion]
+    //     );
+    //   }
+    // }
+
+    // $permisos = [
+    //   1 => $permisosUsuario['administrador'],
+    //   2 => $permisosUsuario['almacenero'],
+    //   3 => $permisosUsuario['vendedor'],
+    //   4 => $permisosUsuario['cajero'],
+    // ];
+
+    // return $permisos[$_SESSION['cargoId']];
   }
 }
