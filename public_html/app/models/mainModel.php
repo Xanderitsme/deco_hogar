@@ -347,4 +347,16 @@ class mainModel
 
     return $alerta;
   }
+
+  protected function crearAlertaRecargarError($titulo, $mensajeAlerta)
+  {
+    $alerta = [
+      "tipo" => "recargar",
+      "titulo" => $titulo,
+      "texto" => $mensajeAlerta,
+      "icono" => "error"
+    ];
+
+    return $alerta;
+  }
 }

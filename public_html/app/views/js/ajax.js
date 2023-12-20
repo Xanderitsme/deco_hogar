@@ -100,3 +100,31 @@ btn_exit.addEventListener("click", function (e) {
     }
   });
 });
+
+const formularios_sin_confirmacion = document.querySelectorAll(".FormularioSinConfirmacion");
+
+formularios_sin_confirmacion.forEach(formularios => {
+  formularios.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    let data = new FormData(this);
+    let method = this.getAttribute("method");
+    let action = this.getAttribute("action");
+
+    let encabezados = new Headers();
+
+    let config = {
+      method: method,
+      headers: encabezados,
+      mode: 'cors',
+      caches: 'no-cache',
+      body: data
+    };
+
+    fetch(action, config)
+      .then(respuesta => respuesta.json())
+      .then(respuesta => {
+        return alertas_ajax(respuesta);
+      });
+  });
+});
