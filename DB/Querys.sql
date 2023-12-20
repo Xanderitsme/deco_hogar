@@ -72,3 +72,4 @@ where proformas_venta.ID = 2;
 select * from detalles;
 
 update proformas_venta set estado = 3 where ID = 2;
+
