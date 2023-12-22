@@ -86,9 +86,15 @@ class proformaVentaModel extends mainModel implements ProformaVenta
     if (is_null($detalleId)) {
       return null;
     }
+<<<<<<< HEAD
   
     return ($detalleId->rowCount() > 0) 
       ? $detalleId->fetchColumn() 
+=======
+
+    return ($detalleId->rowCount() > 0)
+      ? $detalleId->fetchColumn()
+>>>>>>> a1e60c4a7f789ce0c87347adf00f66d418b4cae9
       : 0;
   }
 }

@@ -79,6 +79,7 @@ create table if not exists detalles (
     ID int auto_increment,
     cantidad int not null default 1,
     subtotal decimal(7, 2) not null,
+    unidad enum('Unidad') not null,
     productoID int not null,
     proforma_ventaID int not null,
     foreign key (productoID) references productos (ID) on delete cascade,
@@ -160,8 +161,12 @@ create table if not exists cuentas (
     primary key (ID)
 );
 
+<<<<<<< HEAD
 
 drop table if exists caja;
+=======
+-- drop table if exists caja;
+>>>>>>> a1e60c4a7f789ce0c87347adf00f66d418b4cae9
 create table if not exists caja (
     ID int not null auto_increment,
     saldo decimal(7, 2) not null default 0,
