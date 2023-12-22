@@ -3,6 +3,7 @@
 namespace app\models;
 
 use app\models\mainModel;
+use PDO;
 
 interface Producto extends Objeto
 {
@@ -38,6 +39,20 @@ class productModel extends mainModel implements Producto
 
   public function obtener($id)
   {
+    $consulta_datos = "
+      select
+        productos.nombre,
+        productos.descripcion,
+        productos.precio_venta,
+        productos.precio_compra,
+        productos.stock
+      from productos where ID = $id";
+
+    $datos = $this->ejecutarConsulta($consulta_datos);
+
+    if (is_null($datos)) return null;
+
+    return $datos->fetch(PDO::FETCH_ASSOC);
   }
 
   public function actualizar($id, $datos)
