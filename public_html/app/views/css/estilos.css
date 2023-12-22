@@ -124,7 +124,7 @@ html {
 }
 
 .tabla>.nav-productos {
-  grid-template-columns: 12fr 2fr 2fr 1fr;
+  grid-template-columns: 12fr 2fr 2fr 1.3fr;
 }
 
 .tabla>.detalles-producto {
@@ -149,11 +149,12 @@ html {
 }
 
 .tabla>.nav-prod-sel {
-  grid-template-columns: 10fr 2fr;
+  grid-template-columns: 11fr 3fr 5fr 6fr;
+  column-gap: 10px;
 }
 
 .tabla>.prod-sel {
-  grid-template-columns: 8fr 1fr 1fr;
+  grid-template-columns: 11fr 3fr 5fr 2fr 2fr;
   column-gap: 10px;
 }
 
