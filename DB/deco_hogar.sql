@@ -18,7 +18,7 @@ create table if not exists trabajadores (
     telefono varchar (9) unique,
     email varchar (60) unique,
     fecha_contratacion date not null default (now()),
-    sueldo float not null,
+    sueldo decimal(7, 2) not null,
     cargoID int not null,
     foreign key (cargoID) references cargos (ID) on delete cascade,
     primary key (ID)
@@ -55,8 +55,8 @@ create table if not exists productos (
     ID int auto_increment,
     nombre varchar (100) not null unique,
     descripcion varchar (250) not null,
-    precio_venta float not null,
-    precio_compra float not null,
+    precio_venta decimal(7, 2) not null,
+    precio_compra decimal(7, 2) not null,
     stock int default 0 not null,
     primary key (ID)
 );
@@ -64,7 +64,7 @@ create table if not exists productos (
 -- drop table if exists proformas_venta;
 create table if not exists proformas_venta (
     ID int auto_increment,
-    total float not null,
+    total decimal(9, 2) not null,
     fecha timestamp not null default current_timestamp,
     clienteID int not null,
     vendedorID int not null,
@@ -78,7 +78,7 @@ create table if not exists proformas_venta (
 create table if not exists detalles (
     ID int auto_increment,
     cantidad int not null default 1,
-    subtotal float not null,
+    subtotal decimal(7, 2) not null,
     unidad enum('Unidad') not null,
     productoID int not null,
     proforma_ventaID int not null,
@@ -158,5 +158,14 @@ create table if not exists cuentas (
     clave varchar (100) not null,
     foto varchar (200),
     foreign key (trabajadorID) references trabajadores (ID) on delete cascade,
+    primary key (ID)
+);
+
+-- drop table if exists caja;
+create table if not exists caja (
+    ID int not null auto_increment,
+    saldo decimal(7, 2) not null default 0,
+    cajeroID int not null,
+    foreign key (cajeroID) references trabajadores (ID) on delete cascade,
     primary key (ID)
 );
