@@ -52,12 +52,15 @@ class proformaVentaModel extends mainModel implements ProformaVenta
   {
     $consulta_datos = "
       select
-        productos.nombre, 
+        productos.nombre,
+        detalles.ID,
+        detalles.cantidad,
         detalles.subtotal 
       from proformas_venta
       join detalles on detalles.proforma_ventaID = proformas_venta.ID
       join productos on detalles.productoID = productos.ID
-      where proformas_venta.ID = $id";
+      where proformas_venta.ID = $id
+      order by detalles.ID desc";
 
     $datos = $this->ejecutarConsulta($consulta_datos);
 
@@ -66,5 +69,26 @@ class proformaVentaModel extends mainModel implements ProformaVenta
     }
 
     return $datos->fetchAll();
+  }
+
+  public function detalleProductoAgregado($id, $productoId)
+  {
+    $consulta_detalle = "
+      select 
+        detalles.ID
+      from proformas_venta
+      join detalles on detalles.proforma_ventaID = proformas_venta.ID
+      where proformas_venta.ID = $id
+      and detalles.productoID = $productoId";
+
+    $detalleId = $this->ejecutarConsulta($consulta_detalle);
+
+    if (is_null($detalleId)) {
+      return null;
+    }
+
+    return ($detalleId->rowCount() > 0)
+      ? $detalleId->fetchColumn()
+      : 0;
   }
 }
