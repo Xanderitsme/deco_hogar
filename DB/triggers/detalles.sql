@@ -1,6 +1,7 @@
 use deco_hogar;
 
 -- DROP TRIGGER before_insert_detalles;
+DELIMITER $$
 CREATE TRIGGER `before_insert_detalles` 
 BEFORE INSERT ON `detalles` FOR EACH ROW BEGIN
     update productos set stock = (stock - new.cantidad)
@@ -8,10 +9,12 @@ BEFORE INSERT ON `detalles` FOR EACH ROW BEGIN
 
     update proformas_venta set total = (total + new.subtotal)
     where `ID` = new.proforma_ventaID;
-END
+END$$
+DELIMITER ;
 
 
 -- DROP TRIGGER after_delete_detalles;
+DELIMITER $$
 CREATE TRIGGER `after_delete_detalles` 
 AFTER DELETE ON `detalles` FOR EACH ROW BEGIN
     update productos set stock = (stock + old.cantidad)
@@ -19,10 +22,12 @@ AFTER DELETE ON `detalles` FOR EACH ROW BEGIN
 
     update proformas_venta set total = (total - old.subtotal)
     where `ID` = old.proforma_ventaID;
-END
+END$$
+DELIMITER ;
 
 
 -- DROP TRIGGER after_update_detalles;
+DELIMITER $$
 CREATE TRIGGER `after_update_detalles` 
 BEFORE UPDATE ON `detalles` FOR EACH ROW BEGIN
     update productos set stock = (stock + old.cantidad)
@@ -36,4 +41,5 @@ BEFORE UPDATE ON `detalles` FOR EACH ROW BEGIN
 
     update proformas_venta set total = (total + new.subtotal)
     where `ID` = new.proforma_ventaID;
-END
+END$$
+DELIMITER ;
