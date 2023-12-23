@@ -1,5 +1,5 @@
-drop database if exists deco_hogar;
-create database if not exists deco_hogar;
+-- drop database if exists deco_hogar;
+-- create database if not exists deco_hogar;
 use deco_hogar;
 
 -- drop table if exists cargos;

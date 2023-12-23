@@ -16,6 +16,8 @@ interface Usuario extends Objeto
   ];
 
   const IMG_DIR = "../views/fotos/";
+  const MAX_WIDTH = 250;
+  const MAX_HEIGHT = 250;
 }
 
 class userModel extends mainModel implements Usuario
@@ -125,10 +127,53 @@ class userModel extends mainModel implements Usuario
         break;
     }
 
-    chmod(self::IMG_DIR, 0777);
+    $filePath = $_FILES['usuario_foto']['tmp_name'];
 
-    if (!move_uploaded_file($_FILES['usuario_foto']['tmp_name'], self::IMG_DIR . $foto))
-      return $this->crearAlertaError("No podemos subir la imagen al sistema en este momento");
+    list($originalWidth, $originalHeight) = getimagesize($filePath);
+
+    if ($originalWidth > self::MAX_WIDTH || $originalHeight > self::MAX_HEIGHT) {
+      $ratio = min($originalWidth / self::MAX_WIDTH, $originalHeight / self::MAX_HEIGHT);
+      $newWidth = $originalWidth / $ratio;
+      $newHeight = $originalHeight / $ratio;
+
+      $resizedImage = imagecreatetruecolor($newWidth, $newHeight);
+
+      switch (mime_content_type($_FILES['usuario_foto']['tmp_name'])) {
+        case 'image/jpeg':
+          $source = imagecreatefromjpeg($filePath);
+          break;
+        case 'image/png':
+          $source = imagecreatefrompng($filePath);
+          break;
+      }
+
+      imagecopyresampled($resizedImage, $source, 0, 0, 0, 0, $newWidth, $newHeight, $originalWidth, $originalHeight);
+
+      $originalWidth = imagesx($resizedImage);
+      $originalHeight = imagesy($resizedImage);
+
+      $src_x = ($originalWidth - self::MAX_WIDTH) / 2;
+      $src_y = ($originalHeight - self::MAX_HEIGHT) / 2;
+
+      $dst_image = imagecreatetruecolor(self::MAX_WIDTH, self::MAX_HEIGHT);
+
+      imagecopyresampled($dst_image, $resizedImage, 0, 0, $src_x, $src_y, self::MAX_WIDTH, self::MAX_HEIGHT, self::MAX_WIDTH, self::MAX_HEIGHT);
+
+      switch (mime_content_type($_FILES['usuario_foto']['tmp_name'])) {
+        case 'image/jpeg':
+          imagejpeg($dst_image, self::IMG_DIR . $foto, 100);
+          break;
+        case 'image/png':
+          imagepng($dst_image, self::IMG_DIR . $foto, 10);
+          break;
+      }
+
+      imagedestroy($resizedImage);
+      imagedestroy($source);
+      imagedestroy($dst_image);
+    } else {
+      move_uploaded_file($_FILES['usuario_foto']['tmp_name'], self::IMG_DIR . $foto);
+    }
 
     return $foto;
   }
